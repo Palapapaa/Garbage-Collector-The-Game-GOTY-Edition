@@ -1,18 +1,22 @@
+var game;
+
 window.onload = function() {
 
-    var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create });
-
-    function preload () {
-
-        //game.load.image('logo', 'phaser.png');//lel
-
+    game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameDiv');
+    
+    game.global ={
+        
     }
-
-    function create () {
-
-        //var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-        //logo.anchor.setTo(0.5, 0.5);
-
-    }
+    
+    //ajout de tous les états du jeu
+    game.state.add('boot', bootState);
+    game.state.add('load', loadState);
+    game.state.add('menu', menuState);
+    game.state.add('worldmap', worldmapState);
+    game.state.add('shooter', shooterState);
+    game.state.add('shop', shopState);
+    
+    //etat de départ
+    game.state.start('boot');
 
 };
