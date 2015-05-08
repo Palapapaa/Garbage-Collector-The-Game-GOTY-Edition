@@ -32,9 +32,14 @@ var loadState = {
         game.load.image('spriteProjPaper' , 'assets/graphics/sprite_projectile_glass_e1.png');
         game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_paper_e1.png');
 
-
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         game.load.image('spritePickup' , 'assets/graphics/sprite_pickup_e1.png');
+        
+        game.load.image('upArrowPic' , 'assets/graphics/up_arrow.png');
+        game.load.image('downArrowPic' , 'assets/graphics/down_arrow.png');
+        game.load.image('leftArrowPic' , 'assets/graphics/left_arrow.png');
+        game.load.image('rightArrowPic' , 'assets/graphics/right_arrow.png');
+        game.load.image('spaceBarPic' , 'assets/graphics/space_bar.png');
         
         // Chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);
