@@ -29,11 +29,17 @@ var shooterState = {
         
 
 		this.ennemies    = game.add.group();
+        this.ennemies.enableBody = true;
         this.projectiles = game.add.group();
+        this.projectiles.enableBody = true;
 
         //this.ennemies.enableBody(true);
         this.ennemies.createMultiple(25, "spriteTrashPlastic");
+        game.physics.arcade.collide(this.player, this.ennemies);
+
         this.projectiles.createMultiple(25, "spriteProjMetal");
+        game.physics.arcade.collide(this.player, this.projectiles);
+
 
         console.log("shooter state create() finished");
 
@@ -73,14 +79,18 @@ var shooterState = {
             var spriteProj = this.projectiles.children[i];
             spriteProj.x+= spriteProj.speed;
         }
+        game.physics.arcade.overlap(this.ennemies, this.projectiles, this.todoTrouverNomCarJaiLaFlemme, null, this);
+
 
         //mise à jour des ennemis
         for(var i = 0, l = this.ennemies.children.length; i < l; i++){
         	var spriteEnnemy = this.ennemies.children[i];
         	spriteEnnemy.x-=this.levelSpeed;
             //test de collision avec le joueur
-        	game.physics.arcade.overlap(this.player.sprite, this.ennemies.children[i].sprite, this.takeDamage, null, this);
+        game.physics.arcade.overlap(this.player.sprite, this.ennemies.children[i], this.takeDamage, null, this);
+
         }
+
         
     },
 
@@ -102,7 +112,6 @@ var shooterState = {
 
         ennemy.life   = 10;
         var type= "plastic";
-        console.log(ennemy)
         var sprite = "spriteTrashPlastic";
         if(type === "metal"){
             sprite = "spriteTrashMetal";
@@ -172,4 +181,10 @@ var shooterState = {
         }
 
     },
+
+    todoTrouverNomCarJaiLaFlemme: function(ennemy, projectile){
+        console.log("pouet")
+        ennemy.kill();
+        projectile.kill();
+    }
 };
