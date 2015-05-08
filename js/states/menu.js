@@ -20,10 +20,15 @@ var menuState = {
     },
     
     update : function(){
-        //passage à l'état de jeu worldmap
+        // Passage à l'état de jeu worldmap
         if(this.inputManager.select.isDown){
-            console.log("Enter down : "+this.inputManager.select.isDown);
             game.state.start('worldmap');
+        }// Passage à l'état de jeu tutorial
+        else if(this.inputManager.tutorial.isDown){
+            game.state.start('tutorial');
+        }// Passage à l'état de jeu achievement
+        else if(this.inputManager.achievement.isDown){
+            game.state.start('achievement');
         }
         
         

@@ -13,14 +13,16 @@ window.onload = function() {
 
     }
     
-    //ajout de tous les états du jeu
+    // Ajout de tous les états du jeu
     game.state.add('boot', bootState);
     game.state.add('load', loadState);
     game.state.add('menu', menuState);
+    game.state.add('achievement', achievementState);
+    game.state.add('tutorial', tutorialState);
     game.state.add('worldmap', worldmapState);
-    game.state.add('shooter', shooterState);
     game.state.add('shop', shopState);
+    game.state.add('shooter', shooterState);    
 
-    //etat de départ
+    // Etat de départ
     game.state.start('boot');
 };

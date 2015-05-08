@@ -39,9 +39,7 @@ var worldmapState = {
         // Passage à l'état de jeu menu
         if(this.inputManager.esc.isDown){
             game.state.start('menu');
-        }
-        
-        
+        }    
     },
     
 };
