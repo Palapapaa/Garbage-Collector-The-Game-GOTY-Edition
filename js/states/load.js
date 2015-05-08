@@ -3,7 +3,12 @@ var loadState = {
     preload : function(){
         console.log("Load state preload");
         
-        game.load.image('menuBackground' , 'assets/graphics/menuBackground.png');
+        
+        //chargement des images
+        game.load.image('menuBackground' , 'assets/graphics/background_menu.png');
+        game.load.image('shopBackground' , 'assets/graphics/background_shop.png');
+        game.load.image('worldmapBackground' , 'assets/graphics/background_worldmap.png');
+        game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
         //chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);

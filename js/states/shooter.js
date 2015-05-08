@@ -5,7 +5,7 @@ var shooterState = {
     },
     
     create : function(){
-        
+        var background = game.add.sprite(0,0,"shooterBackground");
     },
     
     update : function(){
