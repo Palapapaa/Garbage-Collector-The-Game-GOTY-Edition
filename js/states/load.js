@@ -9,6 +9,9 @@ var loadState = {
         game.load.image('shopBackground' , 'assets/graphics/background_shop.png');
         game.load.image('worldmapBackground' , 'assets/graphics/background_worldmap.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
+
+        game.load.image('spritePlayer' , 'assets/graphics/player.png');
+
         
         //chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);
