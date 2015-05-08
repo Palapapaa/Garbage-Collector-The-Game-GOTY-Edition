@@ -6,6 +6,8 @@ window.onload = function() {
     
     game.global ={
         enterLastValue : false,
+        gameWidth : 800,
+        gameHeight : 600,
     }
     
     //ajout de tous les états du jeu

@@ -5,6 +5,7 @@ var worldmapState = {
         
         this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.sKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    
     },
     
     create : function(){
