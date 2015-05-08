@@ -108,7 +108,7 @@ var shooterState = {
 
     movePlayer : function(direction){
     	var newY = this.player.sprite.y + direction*(this.player.speed);
-    	if(this.player.life > 0 && (newY>=this.LEVELTOP&&newY+this.player.sprite.height<=this.LEVELBOTTOM)){
+    	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
     		this.player.sprite.y =newY;
         }
     },
