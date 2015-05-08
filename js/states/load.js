@@ -10,8 +10,8 @@ var loadState = {
         game.load.image('worldmapBackground' , 'assets/graphics/background_worldmap.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
 
-        game.load.image('spritePlayer' , 'assets/graphics/player.png');
-        game.load.image('spriteTrash' , 'assets/graphics/trash.png');
+        game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
+        game.load.image('spriteTrash' , 'assets/graphics/sprite_trash_paper_e1.png');
 
         
         //chargement des sons

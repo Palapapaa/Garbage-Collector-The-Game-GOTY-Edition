@@ -3,5 +3,5 @@ function Player(life, speed, weapon, sprite) {
 	this.speed  = speed;
 	this.weapon = weapon;
 
-	this.sprite = game.add.sprite(144,96,sprite);
+	this.sprite = game.add.sprite(10, 260,sprite);
 }
