@@ -17,14 +17,17 @@ var shooterState = {
 		this.ennemies = [];
 
 		this.nbEnnemies = 150;
-		this.proba = 0.001;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
+		this.proba = 0.011;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
 
 		//Initialisation mouvements
         this.down  = this.game.input.keyboard.addKey(input.moveDown);
         this.up    = this.game.input.keyboard.addKey(input.moveUp);
         this.esc   = this.game.input.keyboard.addKey(input.esc);
 
-
+        this.firstEnnemy = game.add.sprite(11, 261,"spriteTrash");
+        game.physics.arcade.enable(this.firstEnnemy);
+        game.physics.arcade.collide(this.player.sprite, this.firstEnnemy);
+        game.physics.arcade.overlap(this.player.sprite, this.firstEnnemy, this.takeDamage, null, this);
 
     },
     
@@ -37,14 +40,9 @@ var shooterState = {
     	}else if(this.up.isDown){
     		this.movePlayer(this.UP)
     	}
-
-
         if(Math.random() < this.proba){
-            var ennemy = new Trash(10, "spriteTrash");
-        	this.ennemies.push(ennemy);
-        	this.nbEnnemies--;
+	    	this.addEnnemy();
         }
-
 
 
         var indexToDel = [];
@@ -55,8 +53,16 @@ var shooterState = {
         	if(spriteEnnemy.x < (0 - spriteEnnemy.width)){
         		indexToDel.push(i);
         	}
+        	game.physics.arcade.overlap(this.player.sprite, this.ennemies[i].sprite, this.takeDamage, null, this);
         //	ennemies[i].sprite.y--;
 
+        }
+
+        if(indexToDel.length != 0){
+	        for(var i = indexToDel.length-1; i !== 0; i--){
+	        	this.ennemies[indexToDel[i]].sprite.kill();
+	        	this.ennemies.splice(this.ennemies[indexToDel[i]], 1);
+	        }
         }
     },
 
@@ -66,5 +72,18 @@ var shooterState = {
 
     		this.player.sprite.y =newY;
         }
+    },
+
+    addEnnemy : function(){
+        var ennemy = new Trash(10, "spriteTrash");
+        this.ennemies.push(ennemy);
+        this.nbEnnemies--;
+        game.physics.arcade.collide(this.player.sprite, ennemy.sprite);
+
+    },
+
+    takeDamage : function(player, ennemy){
+    	ennemy.kill();
+    	this.player.life--;
     }
 };
