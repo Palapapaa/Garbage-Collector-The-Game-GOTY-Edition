@@ -10,7 +10,6 @@ window.onload = function() {
         gameWidth : 800,
         gameHeight : 600,
         possibleTypes : ["metal", "glass", "plastic", "paper"],
-
     }
     
     // Ajout de tous les états du jeu
