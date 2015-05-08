@@ -10,12 +10,7 @@ function Weapon(delay, type){
 		this.type = type;
 	}
 
-
-	this.fire = function(x,y){
-		var projectile = null;
-		
-		projectile = new Projectile(x,y,5, 1, this.type);
+	this.reloadCooldown = function(){
         this.cooldown = this.delay;
-        return projectile;
 	}
 }

@@ -17,9 +17,6 @@ var shooterState = {
 
         //Initialisation variablles
         this.availableTypes = ["metal", "glass", "plastic", "paper"];
-
-
-
         
         //création des armes du joueur
         var weapons = [];
@@ -31,13 +28,25 @@ var shooterState = {
         this.player = new Player(10, 2, weapons, "spritePlayer");
         
 
-		this.ennemies = [];
-        this.projectiles =[];
+		this.ennemies    = game.add.group();
+        this.ennemies.enableBody = true;
+        this.projectiles = game.add.group();
+        this.projectiles.enableBody = true;
+
+        //this.ennemies.enableBody(true);
+        this.ennemies.createMultiple(25, "spriteTrashPlastic");
+        game.physics.arcade.collide(this.player, this.ennemies);
+
+        this.projectiles.createMultiple(25, "spriteProjMetal");
+        game.physics.arcade.collide(this.player, this.projectiles);
+
 
         console.log("shooter state create() finished");
 
 		this.nbEnnemies = 150;
 		this.proba = 0.011;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
+
+        game.time.events.loop(1000, this.addEnnemy, this);
     },
     
     update : function(){
@@ -63,80 +72,65 @@ var shooterState = {
         
         if(this.inputManager.fire.isDown){
             this.fire();
-            
         }
         
-        //gestion de l'apparition des ennemis
-        if(Math.random() < this.proba){
-	    	this.addEnnemy();
-        }
-
-        
-        var indexToDelEnnemies = [];
-        var indexToDelProj = [];
         //mise à jour des projectiles
-        for(var i = 0, l = this.projectiles.length; i < l; i++){
-            var spriteProj = this.projectiles[i].sprite;
-            spriteProj.x+=this.projectiles[i].speed;
-            if(spriteProj.x > game.global.gameWidth){
-                indexToDelProj.push(i);
-            }
+        for(var i = 0, l = this.projectiles.children.length; i < l; i++){
+            var spriteProj = this.projectiles.children[i];
+            spriteProj.x+= spriteProj.speed;
         }
+        game.physics.arcade.overlap(this.ennemies, this.projectiles, this.todoTrouverNomCarJaiLaFlemme, null, this);
+
+
         //mise à jour des ennemis
-        for(var i = 0, l = this.ennemies.length; i < l; i++){
-        	var spriteEnnemy = this.ennemies[i].sprite;
+        for(var i = 0, l = this.ennemies.children.length; i < l; i++){
+        	var spriteEnnemy = this.ennemies.children[i];
         	spriteEnnemy.x-=this.levelSpeed;
-
-            //l'ennemi arrive à gauche de l'écran
-        	if(spriteEnnemy.x < (0 - spriteEnnemy.width)){
-        		indexToDelEnnemies.push(i);
-        	}
             //test de collision avec le joueur
-        	game.physics.arcade.overlap(this.player.sprite, this.ennemies[i].sprite, this.takeDamage, null, this);
-
-            /*
-            //test de collision avec les projectiles
-            for(var i = 0, l = this.projectiles.length; i < l; i++){
-                var spriteProj = this.projectiles[i].sprite;
-                
-                
-            }
-            */
-
-        //	ennemies[i].sprite.y--;
+        game.physics.arcade.overlap(this.player.sprite, this.ennemies.children[i], this.takeDamage, null, this);
 
         }
 
-        if(indexToDelEnnemies.length != 0){
-	        for(var i = indexToDelEnnemies.length-1; i !== 0; i--){
-	        	this.ennemies[indexToDelEnnemies[i]].sprite.kill();
-	        	this.ennemies.splice(this.ennemies[indexToDelEnnemies[i]], 1);
-	        }
-        }
-        if(indexToDelProj.length != 0){
-            for(var i = indexToDelProj.length-1; i !== 0; i--){
-                this.projectiles[indexToDelProj[i]].sprite.kill();
-                this.projectiles.splice(this.projectiles[indexToDelProj[i]], 1);
-            }
-        }
-
-
-        
         
     },
 
     movePlayer : function(direction){
     	var newY = this.player.sprite.y + direction*(this.player.speed);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP&&newY+this.player.sprite.height<=this.LEVELBOTTOM)){
-
     		this.player.sprite.y =newY;
         }
     },
 
     addEnnemy : function(){
-        var ennemy = new Trash(10, "metal");
-        this.ennemies.push(ennemy);
-        this.nbEnnemies--;
+        //var ennemy = new Trash(10, "metal");
+        var ennemy = this.ennemies.getFirstDead();
+
+        if(!ennemy)
+            return;
+
+        ennemy.trashType = "plastic";
+
+        ennemy.life   = 10;
+        var type= "plastic";
+        var sprite = "spriteTrashPlastic";
+        if(type === "metal"){
+            sprite = "spriteTrashMetal";
+        }else if(type === "glass"){
+            sprite = "spriteTrashGlass";
+        }else if(type === "paper"){
+            sprite = "spriteTrashPaper";
+        }else if(type === "plastic"){
+            sprite = "spriteTrashPlastic";
+
+        }else {
+            console.log("olala un bug, faut p'tetre faire quelque chose");
+        }
+        ennemy.loadTexture(sprite);
+        ennemy.checkWorldBounds = true;
+        ennemy.outOfBoundsKill = true;
+        ennemy.reset(((Math.random()*100) + 700) , ((Math.random() * 328)+250));
+
+
         //game.physics.arcade.collide(this.player.sprite, ennemy.sprite);
 
     },
@@ -145,18 +139,52 @@ var shooterState = {
     	ennemy.kill();
     	this.player.life--;
     },
+
     fire : function(){
         //si l'arme selectionnée est dispo, on tire
         if(this.player.weapons[this.player.selectedWeapon].cooldown === 0){
             console.log("FIRE");
 
-            //Création d'un projectile
+            var projectile = this.projectiles.getFirstDead();
+
+            if(!projectile)
+                return;
+
+            projectile.damage   = 10;
+            var type= "plastic";
+
+            var sprite = "spriteProjPlastic";
+            projectile.speed = 2;
+            if(type === "metal"){
+                sprite = "spriteProjMetal";
+            }else if(type === "glass"){
+                sprite = "spriteProjGlass";
+            }else if(type === "paper"){
+                sprite = "spriteProjPaper";
+            }else if(type === "plastic"){
+                sprite = "spriteProjPlastic";
+
+            }else {
+                console.log("olala un bug, faut p'tetre faire quelque chose")
+            }
+
             var x = this.player.sprite.x+this.player.sprite.width;
             var y = this.player.sprite.y+this.player.sprite.height/2;
-            var p=this.player.weapons[this.player.selectedWeapon].fire(x,y);
-            this.projectiles.push(p);
+            //this.sprite = game.add.sprite(x ,y,sprite);
+            projectile.loadTexture(sprite);
+            projectile.checkWorldBounds = true;
+            projectile.outOfBoundsKill = true;
+            projectile.reset(x, y);
+
+            this.player.weapons[this.player.selectedWeapon].reloadCooldown();
 
         }
 
     },
+
+    todoTrouverNomCarJaiLaFlemme: function(ennemy, projectile){
+        console.log("pouet")
+        ennemy.kill();
+        projectile.kill();
+    }
 };
