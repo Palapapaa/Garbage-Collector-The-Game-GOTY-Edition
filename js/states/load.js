@@ -11,6 +11,7 @@ var loadState = {
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
 
         game.load.image('spritePlayer' , 'assets/graphics/player.png');
+        game.load.image('spriteTrash' , 'assets/graphics/trash.png');
 
         
         //chargement des sons
