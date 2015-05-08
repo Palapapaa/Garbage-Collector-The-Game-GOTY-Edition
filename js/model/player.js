@@ -4,4 +4,8 @@ function Player(life, speed, weapon, sprite) {
 	this.weapon = weapon;
 
 	this.sprite = game.add.sprite(10, 260,sprite);
+    game.physics.arcade.enable(this.sprite);
+  	//this.sprite.enableBody=true;
+
+
 }
