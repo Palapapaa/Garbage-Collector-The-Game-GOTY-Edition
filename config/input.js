@@ -1,10 +1,26 @@
-var input = {
-	'select'         : Phaser.Keyboard.ENTER,
-	'moveUp'         : Phaser.Keyboard.UP,
-	'moveDown'       : Phaser.Keyboard.DOWN,
-	'fire'           : Phaser.Keyboard.SPACEBAR,
-	'esc'            : Phaser.Keyboard.ESC,
-	'toggleMusic'    : Phaser.Keyboard.M,
-	'nextWeapon'     : Phaser.Keyboard.RIGHT,
-	'previousWeapon' : Phaser.Keyboard.LEFT
-};
+var InputManager = function(game){
+	// Initialisation des touches
+    
+    // Touches pour le PC
+    if(!game.device.mobile) {
+        //console.log(game);
+        this.up         = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+        this.down       = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        this.left       = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        this.right      = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.fire       = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.select     = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.shop       = game.input.keyboard.addKey(Phaser.Keyboard.S);
+        this.esc        = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+    } else {
+    // Touches pour le Mobile
+        this.up         = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+        this.down       = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        this.left       = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        this.right      = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.fire       = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.select     = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.shop       = game.input.keyboard.addKey(Phaser.Keyboard.S);
+        this.esc        = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+    }
+}
