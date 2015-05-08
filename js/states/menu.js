@@ -2,14 +2,13 @@ var menuState = {
  
     preload : function(){
         console.log("Menu state preload");       
-        this.bgm          = game.add.audio("bgm_menu");
-        
+        this.bgm          = game.add.audio("bgm_menu");  
         this.startUpSound = game.add.audio("startup");
-        this.enterKey     = this.game.input.keyboard.addKey(input.select);
+        this.inputManager = new InputManager(game);
     },
     
     create : function(){
-        //mise en place du fond d'écran
+        // Affichage de l'image de fond
         var background = game.add.sprite(0,0,"menuBackground");
         
         this.startUpSound.play();
@@ -22,9 +21,8 @@ var menuState = {
     
     update : function(){
         //passage à l'état de jeu worldmap
-        if(this.enterKey.isDown != game.global.enterLastValue){
-            game.global.enterLastValue = this.enterKey.isDown;
-            console.log("Enter down : "+this.enterKey.isDown);
+        if(this.inputManager.select.isDown){
+            console.log("Enter down : "+this.inputManager.select.isDown);
             game.state.start('worldmap');
         }
         

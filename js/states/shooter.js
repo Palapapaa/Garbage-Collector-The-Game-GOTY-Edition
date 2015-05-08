@@ -5,9 +5,11 @@ var shooterState = {
         this.DOWN = 1;
         this.LEVELTOP=250;
         this.LEVELBOTTOM=game.global.gameHeight;
+        this.inputManager = new InputManager(game);
     },
     
     create : function(){
+        // Affichage de l'image de fond
         var background = game.add.sprite(0,0,"shooterBackground");
 
         //Initialisation variablles
@@ -18,23 +20,18 @@ var shooterState = {
 
 		this.nbEnnemies = 150;
 		this.proba = 0.001;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
-
-		//Initialisation mouvements
-        this.down  = this.game.input.keyboard.addKey(input.moveDown);
-        this.up    = this.game.input.keyboard.addKey(input.moveUp);
-        this.esc   = this.game.input.keyboard.addKey(input.esc);
-
-
-
     },
     
     update : function(){
         
         //A voir si on fera vraiment comme ça ...
-        
-        if(this.down.isDown){
+        // Passage à l'état de jeu world map
+        if(this.inputManager.esc.isDown){
+            game.state.start('worldmap');
+        }
+        if(this.inputManager.down.isDown){
     		this.movePlayer(this.DOWN)
-    	}else if(this.up.isDown){
+    	}else if(this.inputManager.up.isDown){
     		this.movePlayer(this.UP)
     	}
 
