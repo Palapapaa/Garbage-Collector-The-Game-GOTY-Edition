@@ -37,7 +37,7 @@ var shooterState = {
         console.log("shooter state create() finished");
 
 		this.nbEnnemies = 150;
-		this.proba = 0.001;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
+		this.proba = 0.011;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
     },
     
     update : function(){
@@ -61,7 +61,7 @@ var shooterState = {
             }
         }
         
-        if(this.fireKey.isDown){
+        if(this.inputManager.fire.isDown){
             this.fire();
             
         }
