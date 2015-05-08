@@ -11,7 +11,16 @@ var loadState = {
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
 
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
-        game.load.image('spriteTrash' , 'assets/graphics/sprite_trash_paper_e1.png');
+        game.load.image('spriteTrashMetal' , 'assets/graphics/sprite_trash_metal_e1.png');
+        game.load.image('spriteTrashPlastic' , 'assets/graphics/sprite_trash_plastic_e1.png');
+        game.load.image('spriteTrashPaper' , 'assets/graphics/sprite_trash_paper_e1.png');
+        game.load.image('spriteTrashGlass' , 'assets/graphics/sprite_trash_glass_e1.png');
+
+        game.load.image('spriteProjMetal' , 'assets/graphics/sprite_projectile_metal_e1.png');
+        game.load.image('spriteProjPlastic' , 'assets/graphics/sprite_projectile_plastic_e1.png');
+        game.load.image('spriteProjPaper' , 'assets/graphics/sprite_projectile_glass_e1.png');
+        game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_paper_e1.png');
+
 
         
         //chargement des sons
