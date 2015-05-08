@@ -7,6 +7,7 @@ var shooterState = {
         this.LEVELBOTTOM=game.global.gameHeight;
         this.nbEnnemies = 150;
         this.proba = 0.011;//Variable pour apparition ennemies (plus elevé = plus d'ennemis)
+        this.levelSpeed = 3;
     },
     
     create : function(){
@@ -21,7 +22,7 @@ var shooterState = {
         //création des armes du joueur
         var weapons = [];
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
-            weapons.push(new Weapon(10,this.availableTypes[i] ));
+            weapons.push(new Weapon(30,this.availableTypes[i] ));
         }
 
         //création joueur
@@ -73,14 +74,35 @@ var shooterState = {
         
         var indexToDelEnnemies = [];
         var indexToDelProj = [];
+        //mise à jour des projectiles
+        for(var i = 0, l = this.projectiles.length; i < l; i++){
+            var spriteProj = this.projectiles[i].sprite;
+            spriteProj.x+=this.projectiles[i].speed;
+            if(spriteProj.x > game.global.gameWidth){
+                indexToDelProj.push(i);
+            }
+        }
+        //mise à jour des ennemis
         for(var i = 0, l = this.ennemies.length; i < l; i++){
         	var spriteEnnemy = this.ennemies[i].sprite;
-        	spriteEnnemy.x--;
+        	spriteEnnemy.x-=this.levelSpeed;
 
+            //l'ennemi arrive à gauche de l'écran
         	if(spriteEnnemy.x < (0 - spriteEnnemy.width)){
         		indexToDelEnnemies.push(i);
         	}
+            //test de collision avec le joueur
         	game.physics.arcade.overlap(this.player.sprite, this.ennemies[i].sprite, this.takeDamage, null, this);
+
+            /*
+            //test de collision avec les projectiles
+            for(var i = 0, l = this.projectiles.length; i < l; i++){
+                var spriteProj = this.projectiles[i].sprite;
+                
+                
+            }
+            */
+
         //	ennemies[i].sprite.y--;
 
         }
@@ -91,6 +113,15 @@ var shooterState = {
 	        	this.ennemies.splice(this.ennemies[indexToDelEnnemies[i]], 1);
 	        }
         }
+        if(indexToDelProj.length != 0){
+            for(var i = indexToDelProj.length-1; i !== 0; i--){
+                this.projectiles[indexToDelProj[i]].sprite.kill();
+                this.projectiles.splice(this.projectiles[indexToDelProj[i]], 1);
+            }
+        }
+
+
+        
         
     },
 
