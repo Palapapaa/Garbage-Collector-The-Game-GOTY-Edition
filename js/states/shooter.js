@@ -13,7 +13,10 @@ var shooterState = {
     
     create : function(){
         // Affichage de l'image de fond
-        var background = game.add.sprite(0,0,"shooterBackground");
+        this.background  = game.add.sprite(0,0,"shooterBackground");
+        console.log(game.global.width)
+        this.background2 = game.add.sprite(game.global.gameWidth,0,"shooterBackground");
+
 
         //Initialisation variablles
         this.availableTypes = ["metal", "glass", "plastic", "paper"];
@@ -51,6 +54,15 @@ var shooterState = {
     
     update : function(){
         
+        //Déplacement du background
+        this.background.x  -= this.player.speed;
+        this.background2.x -= this.player.speed;
+
+        if(this.background2.x < 0){
+            this.background.x += game.global.gameWidth;
+            this.background2.x += game.global.gameWidth;
+
+        }
 
         //A voir si on fera vraiment comme ça ...
         // Passage à l'état de jeu world map
