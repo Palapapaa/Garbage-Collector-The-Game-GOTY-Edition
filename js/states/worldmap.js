@@ -2,14 +2,25 @@ var worldmapState = {
  
     preload : function(){
         console.log("WorldMap state preload");
-        
-        this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        this.sKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-    
+        this.inputManager = new InputManager(game);
     },
     
     create : function(){
-        var background = game.add.sprite(0,0,"worldmapBackground");
+        // Affichage de l'image de fond
+        var background = game.add.sprite(0,0,"mainBackground");
+        
+        // Affichage du Titre du menu
+        var loadingLabel = game.add.text(game.world.centerX, 100, 'Choix du niveau',
+        { font: '64px Arial', fill: '#ffffff' });
+        loadingLabel.anchor.setTo(0.5, 0.5);
+        
+        // Texte temporaire d'explication 
+        var explainLabel = game.add.text(game.world.centerX, 400, 'Appuyer sur S pour aller à la boutique',
+        { font: '32px Arial', fill: '#ffffff' });
+        explainLabel.anchor.setTo(0.5, 0.5);
+        explainLabel = game.add.text(game.world.centerX, 500, 'Appuyer sur Espace pour jouer',
+        { font: '32px Arial', fill: '#ffffff' });
+        explainLabel.anchor.setTo(0.5, 0.5);
 
         var player = new Player();
 
@@ -17,18 +28,18 @@ var worldmapState = {
     },
     
     update : function(){
-        
-        
-         //passage à l'état de jeu shooter
-        if(this.spaceKey.isDown ){
+         // Passage à l'état de jeu shooter
+        if(this.inputManager.fire.isDown){
             game.state.start('shooter');
         }
-        //passage à l'état de jeu shop
-        if(this.sKey.isDown ){
+        // Passage à l'état de jeu shop
+        if(this.inputManager.shop.isDown){
             game.state.start('shop');
         }
-
-
+        // Passage à l'état de jeu menu
+        if(this.inputManager.esc.isDown){
+            game.state.start('menu');
+        }
         
         
     },
