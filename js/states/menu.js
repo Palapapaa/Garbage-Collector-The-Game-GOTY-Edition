@@ -19,7 +19,7 @@ var menuState = {
         this.startUpSound.play();
         
         this.bgm.loop= true;
-        this.bgm.play();
+        //this.bgm.play();
         
         
     },

@@ -9,6 +9,10 @@ var worldmapState = {
     
     create : function(){
         var background = game.add.sprite(0,0,"worldmapBackground");
+
+        var player = new Player();
+
+        var ennemies = [];
     },
     
     update : function(){
@@ -22,6 +26,8 @@ var worldmapState = {
         if(this.sKey.isDown ){
             game.state.start('shop');
         }
+
+
         
         
     },
