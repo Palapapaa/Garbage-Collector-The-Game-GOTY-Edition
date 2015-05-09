@@ -56,11 +56,9 @@ var menuState = {
         }
         
         // On lance l'état sélectionné
-        if(this.inputManager.fire.isDown){
+        if(this.inputManager.select.isDown){
             game.state.start(this.menuItems[this.selectedItem].id);
-        }
-        
-        
+        }       
     },
     
     //changement d'item dans le menu

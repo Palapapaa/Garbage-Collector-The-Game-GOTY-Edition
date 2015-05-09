@@ -39,19 +39,13 @@ var shooterState = {
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
         this.background2 = game.add.sprite(this.background.width,0,"shooterBackground");
-        
 
         this.scoreLabel = game.add.text(game.world.centerX, 50, "Score : "+this.score,
         { font: '32px Arial', fill: '#FFFF00' });
         this.scoreLabel.anchor.setTo(0.5, 0.5);
 
-        // Définition du Barillet
-        this.barillet = game.add.sprite(704, 96, 'spriteBarillet');
-        this.barillet.anchor.setTo(0.5, 0.5);
-        this.barillet.alpha = 0.75;
-        
-        // Initialisation variablles
-        this.availableTypes = ["metal", "glass", "plastic", "paper"];
+        // Initialisation variables
+        this.availableTypes = ["plastic","metal", "glass", "paper"];
         
         // Création des armes du joueur
         var weapons = [];
@@ -72,15 +66,33 @@ var shooterState = {
         this.lifeTab = [];
         this.updatePlayerLife(this.player.life);
         
+        // Définition du barillet
+        this.barillet = game.add.sprite(704, 96, 'spriteSheetBarillet');
+        this.barillet.anchor.setTo(0.5, 0.5);
+        this.barillet.alpha = 0.75;
+        this.barillet.labelWeapon0 = game.add.text(704, 55, game.global.inputLabel[0],
+        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        this.barillet.labelWeapon0 = game.add.text(747, 98, game.global.inputLabel[1],
+        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        this.barillet.labelWeapon0 = game.add.text(704, 140, game.global.inputLabel[2],
+        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        this.barillet.labelWeapon0 = game.add.text(662, 98, game.global.inputLabel[3],
+        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        
+        this.barillet.animations.add('idle', 0, 8, true);
+        this.barillet.animations.add('weapon0', [0,1,0,1,0], 8, false);
+        this.barillet.animations.add('weapon1', [0,2,0,2,0], 8, false);
+        this.barillet.animations.add('weapon2', [0,3,0,3,0], 8, false);
+        this.barillet.animations.add('weapon3', [0,4,0,4,0], 8, false);
+        
         // Groupe ennemi
 		this.ennemies    = game.add.group();
         this.ennemies.enableBody = true;
-        this.boss        = null;
+        this.boss         = null;
         this.deplacementX = 0;
         this.dirX         = 1;//Direction du déplacement (-1 ou 1)
         this.deplacementY = 0;
         this.dirY         = 1;//Direction du déplacement (-1 ou 1)
-
 
         // Groupe projectiles
         this.projectiles = game.add.group();
@@ -105,7 +117,6 @@ var shooterState = {
         this.emitterRed.setYSpeed(-150, 150);
         this.emitterRed.gravity = 0;
         this.emitterRed.makeParticles('particleRed');
-
 
         // Particules vertes
         this.emitterGreen = game.add.emitter(0, 0 , 15);
@@ -146,10 +157,18 @@ var shooterState = {
             this.movePlayer(this.UP);
         }
 
-        if(this.inputManager.right.isDown){
-            this.switchWeapon(this.DOWN);
-        }else if(this.inputManager.left.isDown){
-            this.switchWeapon(this.UP);
+        if(this.inputManager.weapon1.isDown){
+            this.switchWeapon(0);
+            this.fire();
+        }else if(this.inputManager.weapon2.isDown){
+            this.switchWeapon(1);
+            this.fire();
+        }else if(this.inputManager.weapon3.isDown){
+            this.switchWeapon(2);
+            this.fire();
+        }else if(this.inputManager.weapon4.isDown){
+            this.switchWeapon(3);
+            this.fire();
         }
         
         //cooldown changement d'arme
@@ -163,10 +182,6 @@ var shooterState = {
             if(this.player.weapons[i].cooldown >0){
                 this.player.weapons[i].cooldown--;
             }
-        }
-        
-        if(this.inputManager.fire.isDown){
-            this.fire();
         }
         
         //mise à jour des projectiles
@@ -254,17 +269,12 @@ var shooterState = {
         }
     },
 
-    //changement de l'arme du joueur
-    switchWeapon : function(direction){
+    // Changement de l'arme du joueur
+    switchWeapon : function(weapon){
         if(this.weaponSwitchCooldown <= 0){
-             this.player.selectedWeapon=(this.player.selectedWeapon+direction)%this.player.weapons.length;
-            if(this.player.selectedWeapon <0){
-                this.player.selectedWeapon = this.player.weapons.length-1;
-            }
-
-            // Sprite rotate Right
-            this.barillet.angle += direction*90;
-
+            this.player.selectedWeapon = weapon;
+            this.barillet.animations.play('weapon'+weapon);
+            console.log('weapon'+weapon);
             this.weaponSwitchCooldown=this.WEAPONSWITCHDELAY;
         }
         
@@ -314,7 +324,7 @@ var shooterState = {
             //mort du joueur
             if(this.player.life <= 0){                
                 this.deathSound.play();
-                game.state.start('menu');
+                game.state.start('gameover');
             }
         }
     	
@@ -469,7 +479,7 @@ var shooterState = {
             this.score += 100;
             this.updateTextScore();
             this.winSound.play();
-            game.state.start('worldmap');
+            game.state.start('quizz');
         }
 
         projectile.kill();
