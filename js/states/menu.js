@@ -13,7 +13,6 @@ var menuState = {
             {"id" : "achievement", "y" : game.world.centerY+160},
         ];
         this.selectedItem = game.global.selectedItem;
-        console.log(this.selectedItem);
         this.MENUSWITCHDELAY = 8;//temps entre chaque changement d'item dans le menu
         this.menuSwitchCooldown=0;//temps avant de changer d'item dans le menu à nouveau
     },
