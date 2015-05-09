@@ -38,7 +38,7 @@ var shooterState = {
         //création des armes du joueur
         var weapons = [];
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
-            weapons.push(new Weapon(30,this.availableTypes[i], 5));
+            weapons.push(new Weapon(30,this.availableTypes[i], 5, 2));
         }
 
         //création joueur
@@ -234,6 +234,7 @@ var shooterState = {
             //mort du joueur
             if(this.player.life <= 0){                
                 this.deathSound.play();
+                game.state.start('menu');
             }
         }
     	
@@ -343,6 +344,14 @@ var shooterState = {
     },
 
     damageBoss : function(boss, projectile){
+        this.boss.life -= projectile.damage;
+
+        if(this.boss.life <= 0){
+            boss.kill();
+            game.state.start('menu');
+        }
+
         projectile.kill();
+
     }
 };
