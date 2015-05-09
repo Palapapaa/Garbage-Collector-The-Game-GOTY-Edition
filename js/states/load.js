@@ -26,6 +26,8 @@ var loadState = {
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
+        
+        
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
         game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/spriteSheet.png', 144, 96);
 
@@ -77,14 +79,28 @@ var loadState = {
             
         }
         
+        //chargement des images liées aux niveaux
+        game.load.image('levelSelector' , 'assets/graphics/level_selector.png');
+        game.load.image('levelButton' , 'assets/graphics/level_button.png');
+        game.load.image('iconCleared' , 'assets/graphics/icon_cleared.png');
+        for(var i=0, l = levels.length; i<l; i++){
+            game.load.image("icon"+levels[i].id , 'assets/graphics/'+levels[i].icon);
+            
+        }
+        
+        
+        
         // Chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);
         game.load.audio('hit',['assets/audio/hit.wav',]);
         game.load.audio('death',['assets/audio/death.wav',]);
+        game.load.audio('win',['assets/audio/win.wav',]);
         game.load.audio('shoot',['assets/audio/shoot.wav',]);
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    
         game.load.audio('pickup',['assets/audio/pickup.wav',]);
+        game.load.audio('cleanSuccess',['assets/audio/clean_success.wav',]);
+        game.load.audio('cleanFail',['assets/audio/clean_fail.wav',]);
     },
     
     create : function(){
