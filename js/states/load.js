@@ -50,6 +50,7 @@ var loadState = {
         game.load.image('spriteBoss1' , 'assets/graphics/sprite_boss1.png');
         game.load.image('spriteBoss1Damaged' , 'assets/graphics/sprite_boss1_Damaged.png');
 
+        game.load.image('smoke', 'assets/smoke-puff.png');
 
         game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
         game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
