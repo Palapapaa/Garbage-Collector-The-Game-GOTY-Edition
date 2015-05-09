@@ -184,19 +184,20 @@ var shooterState = {
     fire : function(){
         //si l'arme selectionnée est dispo, on tire
         if(this.player.weapons[this.player.selectedWeapon].cooldown === 0){
-            console.log("FIRE");
+            this.shootSound.play();
             var projectile = this.projectiles.getFirstDead();
 
             if(!projectile)
                 return;
 
-            this.shootSound.play();
+            
 
-            projectile.damage   = 10;
+            projectile.damage   = this.player.weapons[this.player.selectedWeapon].damage;            
+            projectile.speed = 2;
+            
             var type= "plastic";
             projectile.type = "plastic";
             var sprite = "spriteProjPlastic";
-            projectile.speed = 2;
             if(type === "metal"){
                 sprite = "spriteProjMetal";
             }else if(type === "glass"){
