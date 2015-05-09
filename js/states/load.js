@@ -47,7 +47,9 @@ var loadState = {
         game.load.image('spriteProjPaper' , 'assets/graphics/sprite_projectile_paper_e1.png');
         game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_glass_e1.png');
         
-        game.load.image('spriteBoss' , 'assets/graphics/sprite_boss.png');
+        game.load.image('spriteBoss1' , 'assets/graphics/sprite_boss1.png');
+        game.load.image('spriteBoss1Damaged' , 'assets/graphics/sprite_boss1_Damaged.png');
+
 
         game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
         game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
