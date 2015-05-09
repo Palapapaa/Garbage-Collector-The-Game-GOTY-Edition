@@ -335,15 +335,15 @@ var shooterState = {
         if(pickup){
             pickup.type = type;
 
-            var sprite = "spritePickup";
+            var sprite = "spritePickupMetal";
             if(type === "metal"){
-                sprite = "spritePickup";
+                sprite = "spritePickupMetal";
             }else if(type === "glass"){
-                sprite = "spritePickup";
+                sprite = "spritePickupGlass";
             }else if(type === "paper"){
-                sprite = "spritePickup";
+                sprite = "spritePickupPaper";
             }else if(type === "plastic"){
-                sprite = "spritePickup";
+                sprite = "spritePickupPlastique";
 
             }else {
                 console.log("Mauvais type de pickup : "+type);
