@@ -22,7 +22,10 @@ var shooterState = {
         this.shootSound  = game.add.audio("shoot");
         this.hitSound    = game.add.audio("hit");
         this.deathSound  = game.add.audio("death");
+        this.winSound  = game.add.audio("win");
         this.pickupSound = game.add.audio("pickup");
+        this.cleanSuccessSound = game.add.audio("cleanSuccess");
+        this.cleanFailSound = game.add.audio("cleanFail");
     },
     
     create : function(){
@@ -55,6 +58,11 @@ var shooterState = {
 		this.ennemies    = game.add.group();
         this.ennemies.enableBody = true;
         this.boss        = null;
+        this.deplacementX = 0;
+        this.dirX         = 1;//Direction du déplacement (-1 ou 1)
+        this.deplacementY = 0;
+        this.dirY         = 1;//Direction du déplacement (-1 ou 1)
+
 
         // Groupe projectiles
         this.projectiles = game.add.group();
@@ -64,7 +72,7 @@ var shooterState = {
         this.pickups = game.add.group();
         this.pickups.enableBody = true;
 
-        this.pickups.createMultiple(25, "spritePickup");
+        this.pickups.createMultiple(25, "spritePickupMetal");
         game.physics.arcade.collide(this.player, this.pickups);
 
         this.ennemies.createMultiple(25, "spriteTrashPlastic");
@@ -92,7 +100,7 @@ var shooterState = {
 
 		this.proba = 0.011;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
 
-        game.time.events.loop(1000, this.addEnnemy, this);
+        this.loopEnnemies = game.time.events.loop(1000, this.addEnnemy, this);
     },
     
     update : function(){
@@ -163,18 +171,51 @@ var shooterState = {
 
         }
 
-        if(this.nbEnnemies < 0){
+        //Les ennemies ont été butés, apparition du boss
+        if(this.nbEnnemies < 0 && this.bossAdded === false){
             //On stop l'apparition des ennemies
-            game.time.events.stop();
+            game.time.events.remove(this.loopEnnemies);
             //Affichage du boss
-            if(this.bossAdded === false){
-                console.log("ajout boss")
-                this.boss = new Boss(42, "spriteBoss", null);
-                this.bossAdded = true;
-                game.physics.arcade.collide(this.boss ,this.projectiles);
-                game.physics.arcade.collide(this.boss, this.player);
+            console.log("ajout boss")
+            this.boss = new Boss(42, "spriteBoss", null);
+            this.bossAdded = true;
+            game.physics.arcade.collide(this.boss ,this.projectiles);
+            game.physics.arcade.collide(this.boss, this.player);
 
+            game.time.events.loop(1000, this.bossAddEnnemy, this);
+
+        }
+
+        if(this.bossAdded === true){
+
+            if(this.boss.sprite.x > 300){
+                this.boss.sprite.x--;
             }
+
+            //Les déplacements de boss c'est chiant --""
+            //Si boss n'est pas en déplacement
+            if( this.deplacementY <= 0){
+                //Proba de déplacement du boss
+                if(Math.random() < 0.05){
+                    this.deplacementY = Math.round(Math.random()*50);
+                    this.dirY         = (Math.round(Math.random())-0.5)*2;
+                }
+            //Si boss en déplacement, on le fait
+            }else{
+                var currentDepY =  Math.round(Math.random());
+
+                this.deplacementY -= currentDepY;
+
+                var newPosY = this.boss.sprite.y + (currentDepY * this.dirY);
+
+                if(newPosY > 250 && newPosY < (game.global.gameHeight - this.boss.sprite.height)){
+                    this.boss.sprite.y = newPosY;
+                }else{
+                    this.dirY = -this.dirY;
+
+                }
+            }
+
         }
 
         //Vérification collision
@@ -185,12 +226,14 @@ var shooterState = {
         if(this.bossAdded === true){
             game.physics.arcade.overlap(this.boss.sprite, this.projectiles, this.damageBoss, null, this);
         }
+
     },
     
     movePlayer : function(direction){
     	var newY = this.player.sprite.y + direction*(this.player.speed);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
     		this.player.sprite.y = newY;
+            this.player.sprite.animations.play('move');
         }
     },
 
@@ -327,6 +370,7 @@ var shooterState = {
 
 
         if(ennemy.type === projectile.type){
+            this.cleanSuccessSound.play();
             //Parametrage particule
             this.emitterGreen.x = ennemy.x;
             this.emitterGreen.y = ennemy.y;
@@ -340,6 +384,7 @@ var shooterState = {
 
 
         }else{
+            this.cleanFailSound.play();
             this.emitterRed.x = ennemy.x;
             this.emitterRed.y = ennemy.y;
             this.emitterRed.start(true, 100, null, 15);
@@ -397,10 +442,44 @@ var shooterState = {
 
         if(this.boss.life <= 0){
             boss.kill();
-            game.state.start('menu');
+            this.winSound.play();
+            game.state.start('worldmap');
         }
 
         projectile.kill();
 
+    },
+
+    bossAddEnnemy : function(){
+        console.log("boss add ennem")
+        var ennemy = this.ennemies.getFirstDead();
+
+        if(!ennemy)
+            return;
+
+        
+        var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
+        ennemy.type = this.availableTypes[enemyTypeId];
+
+        ennemy.life   = 10;
+        
+        
+        var sprite = "spriteTrashPlastic";
+        if(ennemy.type === "metal"){
+            sprite = "spriteTrashMetal";
+        }else if(ennemy.type === "glass"){
+            sprite = "spriteTrashGlass";
+        }else if(ennemy.type === "paper"){
+            sprite = "spriteTrashPaper";
+        }else if(ennemy.type === "plastic"){
+            sprite = "spriteTrashPlastic";
+
+        }else {
+            console.log("Mauvais type d'ennemi : "+type);
+        }
+        ennemy.loadTexture(sprite);
+        ennemy.checkWorldBounds = true;
+        ennemy.outOfBoundsKill = true;
+        ennemy.reset(this.boss.sprite.x  -10, this.boss.sprite.y);  
     }
-};
+}; 

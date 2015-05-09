@@ -21,12 +21,17 @@ var loadState = {
         game.load.setPreloadSprite(this.bar);
         
         // Chargement des images
-        game.load.image('menuBackground' , 'assets/graphics/background_menu.png');
+        game.load.image('menuTitle' , 'assets/graphics/menu_title.png');
+        game.load.image('menuButton' , 'assets/graphics/menu_button.png');
         game.load.image('menuSelector' , 'assets/graphics/menu_selector.png');
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
+        
+        
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
+        game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/sprite_joueur.png', 144, 96);
+
 
         //Sprite trash
         game.load.image('spriteTrashMetal' , 'assets/graphics/sprite_trash_metal_e1.png');
@@ -75,14 +80,28 @@ var loadState = {
             
         }
         
+        //chargement des images liées aux niveaux
+        game.load.image('levelSelector' , 'assets/graphics/level_selector.png');
+        game.load.image('levelButton' , 'assets/graphics/level_button.png');
+        game.load.image('iconCleared' , 'assets/graphics/icon_cleared.png');
+        for(var i=0, l = levels.length; i<l; i++){
+            game.load.image("icon"+levels[i].id , 'assets/graphics/'+levels[i].icon);
+            
+        }
+        
+        
+        
         // Chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);
         game.load.audio('hit',['assets/audio/hit.wav',]);
         game.load.audio('death',['assets/audio/death.wav',]);
+        game.load.audio('win',['assets/audio/win.wav',]);
         game.load.audio('shoot',['assets/audio/shoot.wav',]);
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    
         game.load.audio('pickup',['assets/audio/pickup.wav',]);
+        game.load.audio('cleanSuccess',['assets/audio/clean_success.wav',]);
+        game.load.audio('cleanFail',['assets/audio/clean_fail.wav',]);
     },
     
     create : function(){

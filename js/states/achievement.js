@@ -6,8 +6,9 @@ var achievementState = {
     },
     
     create : function(){
-        // Affichage de l'image de fond
-        var background = game.add.sprite(0,0,"achievementsBackground");
+        // Affichage du fond
+        var background = game.stage.backgroundColor = '#199BC4';
+        var block = game.add.sprite(0,0,"achievementsBackground");
         
         // Affichage du Titre du menu
         var titleLabel = game.add.text(game.world.centerX, 100, 'Succès',
