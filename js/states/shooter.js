@@ -64,7 +64,6 @@ var shooterState = {
 
         console.log("shooter state create() finished");
 
-		this.nbEnnemies = 20;
 		this.proba = 0.011;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
 
         game.time.events.loop(1000, this.addEnnemy, this);
