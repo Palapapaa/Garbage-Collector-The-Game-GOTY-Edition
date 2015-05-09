@@ -18,6 +18,8 @@ var shooterState = {
         this.stop        = false;
         this.bossAdded   = false;
 
+        this.score       = 0;
+
         //Sons
         this.shootSound  = game.add.audio("shoot");
         this.hitSound    = game.add.audio("hit");
@@ -26,13 +28,22 @@ var shooterState = {
         this.pickupSound = game.add.audio("pickup");
         this.cleanSuccessSound = game.add.audio("cleanSuccess");
         this.cleanFailSound = game.add.audio("cleanFail");
+
+
+
     },
     
     create : function(){
+
+
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
-        this.background2 = game.add.sprite(game.global.gameWidth,0,"shooterBackground");
-        
+        this.background2 = game.add.sprite(this.background.width,0,"shooterBackground");
+
+        this.scoreLabel = game.add.text(game.world.centerX, 50, "Score : "+this.score,
+        { font: '32px Arial', fill: '#FFFF00' });
+        this.scoreLabel.anchor.setTo(0.5, 0.5);
+
         // Initialisation variables
         this.availableTypes = ["plastic","metal", "glass", "paper"];
         
@@ -44,6 +55,12 @@ var shooterState = {
 
         // Création joueur
         this.player = new Player(10, 2, weapons, "spritePlayer");
+        this.player.sprite.animations.play('move');
+
+        //Ajout de l'aspirateur sur le joueur
+        this.aspirateur = game.add.sprite(this.player.sprite.x+26, this.player.sprite.y-3, "spriteAspirateur");
+        game.physics.arcade.enable(this.aspirateur);
+
         
         // Définition de la barre de vie
         this.lifeTab = [];
@@ -86,7 +103,7 @@ var shooterState = {
         this.pickups.enableBody = true;
 
         this.pickups.createMultiple(25, "spritePickupMetal");
-        game.physics.arcade.collide(this.player, this.pickups);
+        game.physics.arcade.collide(this.aspirateur, this.pickups);
 
         this.ennemies.createMultiple(25, "spriteTrashPlastic");
         game.physics.arcade.collide(this.player, this.ennemies);
@@ -122,8 +139,8 @@ var shooterState = {
         this.background2.x -= this.levelSpeed;
 
         if(this.background2.x < 0){
-            this.background.x += game.global.gameWidth;
-            this.background2.x += game.global.gameWidth;
+            this.background.x += this.background.width;
+            this.background2.x += this.background.width;
 
         }
 
@@ -192,7 +209,7 @@ var shooterState = {
             //On stop l'apparition des ennemies
             game.time.events.remove(this.loopEnnemies);
             //Affichage du boss
-            this.boss = new Boss(42, "spriteBoss", null);
+            this.boss = new Boss(42, "spriteBoss1", null);
             this.bossAdded = true;
             game.physics.arcade.collide(this.boss ,this.projectiles);
             game.physics.arcade.collide(this.boss, this.player);
@@ -234,7 +251,7 @@ var shooterState = {
         }
 
         //Vérification collision
-        game.physics.arcade.overlap(this.player.sprite, this.pickups, this.takePickup, null, this);
+        game.physics.arcade.overlap(this.aspirateur, this.pickups, this.takePickup, null, this);
         game.physics.arcade.overlap(this.player.sprite, this.ennemies, this.takeDamage, null, this);
         game.physics.arcade.overlap(this.ennemies, this.projectiles, this.collisionEnnemyProjectile, null, this);
         //game.physics.arcade.overlap(this.ennemies, this.projectiles, this.todoTrouverNomCarJaiLaFlemme, null, this);
@@ -248,7 +265,7 @@ var shooterState = {
     	var newY = this.player.sprite.y + direction*(this.player.speed);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
     		this.player.sprite.y = newY;
-            this.player.sprite.animations.play('move');
+            this.aspirateur.y += direction*(this.player.speed);
         }
     },
 
@@ -329,7 +346,6 @@ var shooterState = {
             projectile.type = type;
             var sprite = "spriteProjPlastic";
             if(type === "metal"){
-                
                 sprite = "spriteProjMetal";
             }else if(type === "glass"){
                 sprite = "spriteProjGlass";
@@ -375,8 +391,6 @@ var shooterState = {
 
     //Fonction de collision entre projectile et ennemis
     collisionEnnemyProjectile: function(ennemy, projectile){
-
-
         if(ennemy.type === projectile.type){
             this.cleanSuccessSound.play();
             //Parametrage particule
@@ -386,6 +400,9 @@ var shooterState = {
 
             //Destruction ennemi
             ennemy.kill();
+            this.score += 10;
+            this.updateTextScore();
+
 
             //création pickup
             this.addPickup(ennemy.x, ennemy.y, ennemy.type);
@@ -433,13 +450,19 @@ var shooterState = {
         game.global.totalTrash++;
         if(pickup.type === "metal"){
             game.global.totalMetal++;
+            game.global.stockMetal++;
         }else if(pickup.type === "glass"){
             game.global.totalVerre++;
+            game.global.stockVerre++;
         }else if(pickup.type === "paper"){
             game.global.totalPaper++;
+            game.global.stockPaper++;
         }else if(pickup.type === "plastic"){
             game.global.totalPlastic++;
+            game.global.stockPlastic++;
         }
+        this.score += 15;
+        this.updateTextScore();
 
         pickup.kill();
         this.pickupSound.play();
@@ -448,8 +471,13 @@ var shooterState = {
     damageBoss : function(boss, projectile){
         this.boss.life -= projectile.damage;
 
+        if(this.boss.life < (this.boss.initialLife /2) && this.boss.damaged === false){
+            this.boss.sprite.loadTexture("spriteBoss1Damaged");
+        }
         if(this.boss.life <= 0){
             boss.kill();
+            this.score += 100;
+            this.updateTextScore();
             this.winSound.play();
             game.state.start('worldmap');
         }
@@ -488,5 +516,9 @@ var shooterState = {
         ennemy.checkWorldBounds = true;
         ennemy.outOfBoundsKill = true;
         ennemy.reset(this.boss.sprite.x  -10, this.boss.sprite.y);  
+    },
+
+    updateTextScore : function(){
+        this.scoreLabel.setText("Score : "+this.score);
     }
 }; 

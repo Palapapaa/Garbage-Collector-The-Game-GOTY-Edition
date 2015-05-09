@@ -29,6 +29,7 @@ var loadState = {
         
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
         game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/sprite_joueur.png', 144, 96);
+        game.load.image('spriteAspirateur' , 'assets/graphics/sprite_aspirateur.png');
 
         //Sprite trash
         game.load.image('spriteTrashMetal' , 'assets/graphics/sprite_trash_metal_e1.png');
@@ -43,7 +44,9 @@ var loadState = {
         game.load.image('spriteProjPaper' , 'assets/graphics/sprite_projectile_paper_e1.png');
         game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_glass_e1.png');
         
-        game.load.image('spriteBoss' , 'assets/graphics/sprite_boss.png');
+        game.load.image('spriteBoss1' , 'assets/graphics/sprite_boss1.png');
+        game.load.image('spriteBoss1Damaged' , 'assets/graphics/sprite_boss1_Damaged.png');
+
 
         game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
         game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
