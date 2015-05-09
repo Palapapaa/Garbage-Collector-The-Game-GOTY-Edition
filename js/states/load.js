@@ -65,11 +65,6 @@ var loadState = {
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    
         game.load.audio('pickup',['assets/audio/pickup.wav',]);
-        
-        for(var i=0, l = 100; i<l; i++){
-            game.load.image('achievementsBackground'+[i] , 'assets/graphics/background_achievements.png');
-            
-        }
     },
     
     create : function(){
