@@ -38,7 +38,7 @@ var shooterState = {
 
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
-        this.background2 = game.add.sprite(game.global.gameWidth,0,"shooterBackground");
+        this.background2 = game.add.sprite(this.background.width,0,"shooterBackground");
         
 
         this.scoreLabel = game.add.text(game.world.centerX, 50, "Score : "+this.score,
@@ -128,8 +128,8 @@ var shooterState = {
         this.background2.x -= this.levelSpeed;
 
         if(this.background2.x < 0){
-            this.background.x += game.global.gameWidth;
-            this.background2.x += game.global.gameWidth;
+            this.background.x += this.background.width;
+            this.background2.x += this.background.width;
 
         }
 
