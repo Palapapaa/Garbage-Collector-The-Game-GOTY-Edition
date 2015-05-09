@@ -6,8 +6,8 @@ var tutorialState = {
     },
     
     create : function(){
-        // Affichage de l'image de fond
-        var background = game.add.sprite(0,0,"mainBackground");
+        // Affichage du fond
+        var background = game.stage.backgroundColor = '#199BC4';
         
         // Affichage des images des touches
         var upArrow = game.add.sprite(25,250,"upArrowPic").scale.setTo(0.2, 0.2);

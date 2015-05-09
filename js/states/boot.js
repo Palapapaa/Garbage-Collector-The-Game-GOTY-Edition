@@ -2,9 +2,7 @@ var bootState = {
  
     preload : function(){
         console.log("Boot state preload");
-        
-        // Mise en place du fond d'écran
-        game.load.image('mainBackground' , 'assets/graphics/background.png');
+
         // Mise en place de la progress bar
         game.load.image('progress_bar_bg' , 'assets/graphics/progress_bar_bg.png');
         game.load.image('progress_bar' , 'assets/graphics/progress_bar.png');

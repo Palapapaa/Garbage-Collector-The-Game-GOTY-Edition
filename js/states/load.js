@@ -21,7 +21,8 @@ var loadState = {
         game.load.setPreloadSprite(this.bar);
         
         // Chargement des images
-        game.load.image('menuBackground' , 'assets/graphics/background_menu.png');
+        game.load.image('menuTitle' , 'assets/graphics/menu_title.png');
+        game.load.image('menuButton' , 'assets/graphics/menu_button.png');
         game.load.image('menuSelector' , 'assets/graphics/menu_selector.png');
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
