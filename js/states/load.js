@@ -38,6 +38,10 @@ var loadState = {
         game.load.image('spriteBoss' , 'assets/graphics/sprite_boss.png');
         
 
+        game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
+        game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
+
+
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         game.load.image('spritePickup' , 'assets/graphics/sprite_pickup_e1.png');
         

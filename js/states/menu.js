@@ -11,7 +11,7 @@ var menuState = {
         // Affichage de l'image de fond
         var background = game.add.sprite(0,0,"menuBackground");
         
-        this.startUpSound.play();
+        //this.startUpSound.play();
         
         this.bgm.loop= true;
         //this.bgm.play();
