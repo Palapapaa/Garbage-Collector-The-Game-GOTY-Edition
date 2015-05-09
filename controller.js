@@ -21,9 +21,12 @@ window.onload = function() {
         stockPlastic : 0,
         possibleTypes : ["plastic", "metal", "glass", "paper"],
         lastLevel : 1,
-    }
+        
+    };
     
     // Ajout de tous les états du jeu
+    game.state.add('quizz', quizzState);
+    game.state.add('gameover', gameoverState);
     game.state.add('boot', bootState);
     game.state.add('load', loadState);
     game.state.add('menu', menuState);
