@@ -22,6 +22,7 @@ var loadState = {
         
         // Chargement des images
         game.load.image('menuBackground' , 'assets/graphics/background_menu.png');
+        game.load.image('menuSelector' , 'assets/graphics/menu_selector.png');
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
@@ -49,6 +50,7 @@ var loadState = {
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         game.load.image('spritePickup' , 'assets/graphics/sprite_pickup_e1.png');
         
+        //images tuto
         game.load.image('upArrowPic' , 'assets/graphics/up_arrow.png');
         game.load.image('downArrowPic' , 'assets/graphics/down_arrow.png');
         game.load.image('leftArrowPic' , 'assets/graphics/left_arrow.png');
