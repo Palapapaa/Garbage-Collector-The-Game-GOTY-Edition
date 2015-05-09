@@ -46,6 +46,7 @@ var loadState = {
         game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
         game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
 
+        game.load.image('spriteBarillet' , 'assets/graphics/sprite_barillet.png');
 
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
 
