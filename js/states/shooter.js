@@ -29,7 +29,9 @@ var shooterState = {
         this.cleanSuccessSound = game.add.audio("cleanSuccess");
         this.cleanFailSound = game.add.audio("cleanFail");
 
-
+        this.playerBlink = false;
+        this.playerBlinkCpt = 60;
+        this.playerDisplayed = true;
 
     },
     
@@ -59,6 +61,7 @@ var shooterState = {
 
         //Ajout de l'aspirateur sur le joueur
         this.aspirateur = game.add.sprite(this.player.sprite.x+26, this.player.sprite.y-3, "spriteAspirateur");
+
         game.physics.arcade.enable(this.aspirateur);
 
         
@@ -112,18 +115,26 @@ var shooterState = {
         game.physics.arcade.collide(this.player, this.projectiles);
 
         // Particules rouges
-        this.emitterRed = game.add.emitter(0, 0 , 15);
+        this.emitterRed = game.add.emitter(0, 0 , 30);
         this.emitterRed.setXSpeed(-150, 150);
         this.emitterRed.setYSpeed(-150, 150);
         this.emitterRed.gravity = 0;
         this.emitterRed.makeParticles('particleRed');
 
         // Particules vertes
-        this.emitterGreen = game.add.emitter(0, 0 , 15);
+        this.emitterGreen = game.add.emitter(0, 0 , 30);
         this.emitterGreen.setXSpeed(-150, 150);
         this.emitterGreen.setYSpeed(-150, 150);
         this.emitterGreen.gravity = 0;
         this.emitterGreen.makeParticles('particleGreen');
+
+        //Particules marrons
+        this.emitterBrown = game.add.emitter(0, 0 , 15);
+        this.emitterBrown.setXSpeed(-250, 250);
+        this.emitterBrown.setYSpeed(-250, 250);
+        this.emitterBrown.gravity = 0;
+        this.emitterBrown.makeParticles('particleBrown');
+
 
         console.log("shooter state create() finished");
 
@@ -258,6 +269,24 @@ var shooterState = {
         if(this.bossAdded === true){
             game.physics.arcade.overlap(this.boss.sprite, this.projectiles, this.damageBoss, null, this);
         }
+        if(this.playerBlink === true){
+            if(this.playerBlinkCpt < 0){
+                this.playerBlink = false;
+                this.player.sprite.revive();
+                this.playerBlinkCpt = 60;
+            }else if(this.playerBlinkCpt%2 === 0){
+                if(this.playerDisplayed === true){
+                    this.player.sprite.kill();
+                    this.playerDisplayed = false;
+                }else{
+                    this.player.sprite.revive();
+                    this.playerDisplayed = true;
+                }
+            }
+            this.playerBlinkCpt--;
+
+           
+        }
 
     },
     
@@ -319,8 +348,12 @@ var shooterState = {
         if(this.player.life > 0 ){
             this.hitSound.play();
             ennemy.kill();
-            this.player.life--;
-            this.updatePlayerLife(this.player.life);
+            if(this.playerBlink === false){
+                this.player.life--;
+                this.updatePlayerLife(this.player.life);
+                this.playerBlink = true;
+            }
+
             //mort du joueur
             if(this.player.life <= 0){                
                 this.deathSound.play();
@@ -441,7 +474,13 @@ var shooterState = {
             pickup.loadTexture(sprite);
             pickup.checkWorldBounds = true;
             pickup.outOfBoundsKill = true;
+
             pickup.reset(x , y);
+
+            game.add.tween(pickup).to({"y" : y-10}).easing(Phaser.Easing.Bounce.Out).start();
+           // game.add.tween(pickup).to({"y" : y}).easing(Phaser.Easing.Bounce.Out).start();
+
+            //sprite.body.bounce.set(0.8);
         }
     },
 
@@ -481,6 +520,11 @@ var shooterState = {
             this.winSound.play();
             game.state.start('quizz');
         }
+
+        //Parametrage particule
+        this.emitterBrown.x = this.boss.sprite.x;
+        this.emitterBrown.y = this.boss.sprite.y;
+        this.emitterBrown.start(true, 100, null, 15);
 
         projectile.kill();
 
