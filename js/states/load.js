@@ -35,7 +35,8 @@ var loadState = {
         game.load.image('spriteProjPaper' , 'assets/graphics/sprite_projectile_glass_e1.png');
         game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_paper_e1.png');
         
-            
+        game.load.image('spriteBoss' , 'assets/graphics/sprite_boss.png');
+        
 
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         game.load.image('spritePickup' , 'assets/graphics/sprite_pickup_e1.png');

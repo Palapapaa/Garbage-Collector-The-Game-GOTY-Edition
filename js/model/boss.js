@@ -2,5 +2,7 @@ function Boss(life, sprite, pattern){
 
 	this.life      = life;
 	this.sprite    = sprite;
-	this.pattern   = pattern;
+
+	this.sprite = game.add.sprite(600, 260,sprite);
+    game.physics.arcade.enable(this.sprite);
 }
