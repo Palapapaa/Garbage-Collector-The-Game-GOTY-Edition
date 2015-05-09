@@ -61,6 +61,7 @@ var shooterState = {
 
         // Création joueur
         this.player = new Player(10, 2, weapons, "spritePlayer");
+        this.player.sprite.animations.play('move');
 
         //Ajout de l'aspirateur sur le joueur
         this.aspirateur = game.add.sprite(this.player.sprite.x+26, this.player.sprite.y-3, "spriteAspirateur");
@@ -193,7 +194,7 @@ var shooterState = {
             //On stop l'apparition des ennemies
             game.time.events.remove(this.loopEnnemies);
             //Affichage du boss
-            this.boss = new Boss(42, "spriteBoss", null);
+            this.boss = new Boss(42, "spriteBoss1", null);
             this.bossAdded = true;
             game.physics.arcade.collide(this.boss ,this.projectiles);
             game.physics.arcade.collide(this.boss, this.player);
@@ -249,7 +250,6 @@ var shooterState = {
     	var newY = this.player.sprite.y + direction*(this.player.speed);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
     		this.player.sprite.y = newY;
-            this.player.sprite.animations.play('move');
             this.aspirateur.y += direction*(this.player.speed);
         }
     },
@@ -381,8 +381,6 @@ var shooterState = {
 
     //Fonction de collision entre projectile et ennemis
     collisionEnnemyProjectile: function(ennemy, projectile){
-
-
         if(ennemy.type === projectile.type){
             this.cleanSuccessSound.play();
             //Parametrage particule
@@ -463,6 +461,9 @@ var shooterState = {
     damageBoss : function(boss, projectile){
         this.boss.life -= projectile.damage;
 
+        if(this.boss.life < (this.boss.initialLife /2) && this.boss.damaged === false){
+            this.boss.sprite.loadTexture("spriteBoss1Damaged");
+        }
         if(this.boss.life <= 0){
             boss.kill();
             this.score += 100;
