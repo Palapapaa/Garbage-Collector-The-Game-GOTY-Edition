@@ -16,7 +16,6 @@ var shooterState = {
 
         this.nbEnnemies  = 25;
         this.stop        = false;
-
         this.bossAdded   = false;
 
         //Sons
@@ -30,30 +29,38 @@ var shooterState = {
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
         this.background2 = game.add.sprite(game.global.gameWidth,0,"shooterBackground");
-
-
-        //Initialisation variablles
+        
+        // Définition du Barillet
+        this.barillet = game.add.sprite(704, 96, 'spriteBarillet');
+        this.barillet.anchor.setTo(0.5, 0.5);
+        this.barillet.alpha = 0.75;
+        
+        // Initialisation variablles
         this.availableTypes = ["metal", "glass", "plastic", "paper"];
         
-        //création des armes du joueur
+        // Création des armes du joueur
         var weapons = [];
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
             weapons.push(new Weapon(30,this.availableTypes[i], 5, 2));
         }
 
-        //création joueur
+        // Création joueur
         this.player = new Player(10, 2, weapons, "spritePlayer");
         
-        //Groupe ennemi
+        // Définition de la barre de vie
+        this.lifeTab = [];
+        this.updatePlayerLife(this.player.life);
+        
+        // Groupe ennemi
 		this.ennemies    = game.add.group();
         this.ennemies.enableBody = true;
         this.boss        = null;
 
-        //Groupe projectiles
+        // Groupe projectiles
         this.projectiles = game.add.group();
         this.projectiles.enableBody = true;
 
-        //Groupe pickups
+        // Groupe pickups
         this.pickups = game.add.group();
         this.pickups.enableBody = true;
 
@@ -66,7 +73,7 @@ var shooterState = {
         this.projectiles.createMultiple(25, "spriteProjMetal");
         game.physics.arcade.collide(this.player, this.projectiles);
 
-        //particules rouges
+        // Particules rouges
         this.emitterRed = game.add.emitter(0, 0 , 15);
         this.emitterRed.setXSpeed(-150, 150);
         this.emitterRed.setYSpeed(-150, 150);
@@ -74,13 +81,12 @@ var shooterState = {
         this.emitterRed.makeParticles('particleRed');
 
 
-        //particules vertes
+        // Particules vertes
         this.emitterGreen = game.add.emitter(0, 0 , 15);
         this.emitterGreen.setXSpeed(-150, 150);
         this.emitterGreen.setYSpeed(-150, 150);
         this.emitterGreen.gravity = 0;
         this.emitterGreen.makeParticles('particleGreen');
-
 
         console.log("shooter state create() finished");
 
@@ -91,7 +97,7 @@ var shooterState = {
     
     update : function(){
 
-        //Déplacement du background
+        // Déplacement du background
         this.background.x  -= this.levelSpeed;
         this.background2.x -= this.levelSpeed;
 
@@ -101,7 +107,7 @@ var shooterState = {
 
         }
 
-        //A voir si on fera vraiment comme ça ...
+        // A voir si on fera vraiment comme ça ...
         // Passage à l'état de jeu world map
         if(this.inputManager.esc.isDown === true){
             game.state.start('worldmap');
@@ -180,27 +186,28 @@ var shooterState = {
             game.physics.arcade.overlap(this.boss.sprite, this.projectiles, this.damageBoss, null, this);
         }
     },
-
-    
     
     movePlayer : function(direction){
     	var newY = this.player.sprite.y + direction*(this.player.speed);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
-    		this.player.sprite.y =newY;
+    		this.player.sprite.y = newY;
         }
     },
 
     //changement de l'arme du joueur
     switchWeapon : function(direction){
         if(this.weaponSwitchCooldown <= 0){
-            
              this.player.selectedWeapon=(this.player.selectedWeapon+direction)%this.player.weapons.length;
             if(this.player.selectedWeapon <0){
                 this.player.selectedWeapon = this.player.weapons.length-1;
             }
+
+            // Sprite rotate Right
+            this.barillet.angle += direction*90;
+            console.log(this.barillet.angle);
+
             console.log(this.player.selectedWeapon);
             this.weaponSwitchCooldown=this.WEAPONSWITCHDELAY;
-            
         }
         
     },
@@ -211,7 +218,6 @@ var shooterState = {
 
         if(!ennemy)
             return;
-
         
         var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
         ennemy.type = this.availableTypes[enemyTypeId];
@@ -246,6 +252,7 @@ var shooterState = {
             this.hitSound.play();
             ennemy.kill();
             this.player.life--;
+            this.updatePlayerLife(this.player.life);
             //mort du joueur
             if(this.player.life <= 0){                
                 this.deathSound.play();
@@ -263,8 +270,6 @@ var shooterState = {
 
             if(!projectile)
                 return;
-
-            
 
             projectile.damage   = this.player.weapons[this.player.selectedWeapon].damage;            
             projectile.speed = this.player.weapons[this.player.selectedWeapon].projectileSpeed;
@@ -300,6 +305,21 @@ var shooterState = {
 
         }
 
+    },
+    
+    updatePlayerLife: function(life) {
+        // Suppression de la barre de vie
+        for(var i=this.lifeTab.length-1; i>=0; --i) {
+            this.lifeTab[i].kill();
+        }
+        this.lifeTab = [];
+        // Affichage de la barre de vie
+        for(var i=0; i<life; i+=2) {
+            if(life%2 == 1 && i+2 >= life)
+                this.lifeTab.push(game.add.sprite(32+i*20,32,"spriteLifeHalf"));
+            else
+                this.lifeTab.push(game.add.sprite(32+i*20,32,"spriteLifeFull"));
+        }
     },
 
     //Fonction de collision entre projectile et ennemis

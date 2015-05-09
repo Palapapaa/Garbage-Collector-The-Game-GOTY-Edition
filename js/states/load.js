@@ -46,8 +46,12 @@ var loadState = {
         game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
         game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
 
-
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
+        
+        // Sprites UI
+        game.load.image('spriteLifeHalf' , 'assets/graphics/sprite_life_half.png');
+        game.load.image('spriteLifeFull' , 'assets/graphics/sprite_life_full.png');
+        game.load.image('spriteBarillet' , 'assets/graphics/sprite_barillet.png');
 
         //Pickup
         game.load.image('spritePickupGlass' , 'assets/graphics/sprite_pickup_glass_e1.png');
