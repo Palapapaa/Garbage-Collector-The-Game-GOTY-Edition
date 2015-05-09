@@ -72,7 +72,7 @@ var shooterState = {
         this.pickups = game.add.group();
         this.pickups.enableBody = true;
 
-        this.pickups.createMultiple(25, "spritePickup");
+        this.pickups.createMultiple(25, "spritePickupMetal");
         game.physics.arcade.collide(this.player, this.pickups);
 
         this.ennemies.createMultiple(25, "spriteTrashPlastic");
@@ -233,6 +233,7 @@ var shooterState = {
     	var newY = this.player.sprite.y + direction*(this.player.speed);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
     		this.player.sprite.y = newY;
+            this.player.sprite.animations.play('move');
         }
     },
 
