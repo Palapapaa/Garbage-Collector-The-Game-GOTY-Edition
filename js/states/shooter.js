@@ -30,13 +30,21 @@ var shooterState = {
         //création joueur
         this.player = new Player(10, 2, weapons, "spritePlayer");
         
-
+        //Groupe ennemi
 		this.ennemies    = game.add.group();
         this.ennemies.enableBody = true;
+
+        //Groupe projectiles
         this.projectiles = game.add.group();
         this.projectiles.enableBody = true;
 
-        //this.ennemies.enableBody(true);
+        //Groupe pickups
+        this.pickups = game.add.group();
+        this.pickups.enableBody = true;
+
+        this.pickups.createMultiple(25, "spritePickup");
+        game.physics.arcade.collide(this.player, this.pickups);
+
         this.ennemies.createMultiple(25, "spriteTrashPlastic");
         game.physics.arcade.collide(this.player, this.ennemies);
 
@@ -91,17 +99,26 @@ var shooterState = {
             var spriteProj = this.projectiles.children[i];
             spriteProj.x+= spriteProj.speed;
         }
-        game.physics.arcade.overlap(this.ennemies, this.projectiles, this.todoTrouverNomCarJaiLaFlemme, null, this);
 
+        //mise à jour des pickups
+        for(var i = 0, l = this.pickups.children.length; i < l; i++){
+            var spritePickup = this.pickups.children[i];
+            spritePickup.x-= this.levelSpeed;
+        }
 
         //mise à jour des ennemis
         for(var i = 0, l = this.ennemies.children.length; i < l; i++){
         	var spriteEnnemy = this.ennemies.children[i];
         	spriteEnnemy.x-=this.levelSpeed;
             //test de collision avec le joueur
-        game.physics.arcade.overlap(this.player.sprite, this.ennemies.children[i], this.takeDamage, null, this);
 
         }
+
+        //Vérification collision
+        game.physics.arcade.overlap(this.player.sprite, this.pickups, this.takePickup, null, this);
+        game.physics.arcade.overlap(this.player.sprite, this.ennemies, this.takeDamage, null, this);
+        game.physics.arcade.overlap(this.ennemies, this.projectiles, this.todoTrouverNomCarJaiLaFlemme, null, this);
+
 
         
     },
@@ -120,7 +137,7 @@ var shooterState = {
         if(!ennemy)
             return;
 
-        ennemy.trashType = "plastic";
+        ennemy.type = "plastic";
 
         ennemy.life   = 10;
         var type= "plastic";
@@ -164,7 +181,7 @@ var shooterState = {
 
             projectile.damage   = 10;
             var type= "plastic";
-
+            projectile.type = "plastic";
             var sprite = "spriteProjPlastic";
             projectile.speed = 2;
             if(type === "metal"){
@@ -195,8 +212,47 @@ var shooterState = {
     },
 
     todoTrouverNomCarJaiLaFlemme: function(ennemy, projectile){
-        console.log("pouet")
-        ennemy.kill();
-        projectile.kill();
+        if(ennemy.type === projectile.type){
+            ennemy.kill();
+            projectile.kill();
+            this.addPickup(projectile.x, projectile.y);
+
+        }else{
+            projectile.kill();
+        }
+
+    },
+
+    addPickup : function(x, y, type){
+        //var ennemy = new Trash(10, "metal");
+        var pickup = this.pickups.getFirstDead();
+            console.log("add pickup ?")
+
+        if(pickup){
+            console.log("add pickup")
+            pickup.type = type;
+
+            var sprite = "spritePickup";
+            if(type === "metal"){
+                sprite = "spritePickup";
+            }else if(type === "glass"){
+                sprite = "spritePickup";
+            }else if(type === "paper"){
+                sprite = "spritePickup";
+            }else if(type === "plastic"){
+                sprite = "spritePickup";
+
+            }else {
+                console.log("olala un bug, faut p'tetre faire quelque chose");
+            }
+            pickup.loadTexture(sprite);
+            pickup.checkWorldBounds = true;
+            pickup.outOfBoundsKill = true;
+            pickup.reset(x , y);
+        }
+    },
+
+    takePickup : function(player, pickup){
+        pickup.kill();
     }
 };
