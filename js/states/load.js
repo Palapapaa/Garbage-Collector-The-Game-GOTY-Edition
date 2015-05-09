@@ -48,7 +48,12 @@ var loadState = {
 
 
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
-        game.load.image('spritePickup' , 'assets/graphics/sprite_pickup_e1.png');
+
+        //Pickup
+        game.load.image('spritePickupGlass' , 'assets/graphics/sprite_pickup_glass_e1.png');
+        game.load.image('spritePickupMetal' , 'assets/graphics/sprite_pickup_metal_e1.png');
+        game.load.image('spritePickupPaper' , 'assets/graphics/sprite_pickup_paper_e1.png');
+        game.load.image('spritePickupPlastique' , 'assets/graphics/sprite_pickup_plastic_e1.png');
         
         //images tuto
         game.load.image('upArrowPic' , 'assets/graphics/up_arrow.png');
