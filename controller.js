@@ -15,6 +15,10 @@ window.onload = function() {
         totalVerre : 0,
         totalPaper : 0,
         totalPlastic : 0,
+        stockMetal : 0,
+        stockVerre : 0,
+        stockPaper : 0,
+        stockPlastic : 0,
         possibleTypes : ["metal", "glass", "plastic", "paper"],
         lastLevel : 1,
     }
