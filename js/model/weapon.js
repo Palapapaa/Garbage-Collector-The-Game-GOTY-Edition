@@ -1,7 +1,8 @@
-function Weapon(delay, type){
+function Weapon(delay, type, projectileSpeed){
 	
 	this.delay      = delay; //temps entre chaque tir
 	this.cooldown   = 0; //temps avant le prochain tir
+    this.projectileSpeed = projectileSpeed;
 	//vérification de la validité du type
 	if(game.global.possibleTypes.indexOf(type) === -1 ){
 		console.log("pas bien");

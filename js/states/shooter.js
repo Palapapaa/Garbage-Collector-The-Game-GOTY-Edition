@@ -4,12 +4,13 @@ var shooterState = {
         this.UP = -1;
         this.DOWN = 1;
         this.LEVELTOP=250;
-        this.LEVELBOTTOM=game.global.gameHeight;
+        this.LEVELBOTTOM=game.global.gameHeight;        
+        this.WEAPONSWITCHDELAY = 20;//temps entre chaque changement d'arme
         this.nbEnnemies = 150;
-        this.proba = 0.011;//Variable pour apparition ennemies (plus elevé = plus d'ennemis)
+        this.proba = 0.003;//Variable pour apparition ennemies (plus elevé = plus d'ennemis)
         this.levelSpeed = 3;
         this.inputManager = new InputManager(game);
-        
+        this.weaponSwitchCooldown=0;//temps avant de tirer à nouveau
         this.shootSound = game.add.audio("shoot");
         this.hitSound = game.add.audio("hit");
         this.deathSound = game.add.audio("death");
@@ -19,7 +20,6 @@ var shooterState = {
     create : function(){
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
-        console.log(game.global.width)
         this.background2 = game.add.sprite(game.global.gameWidth,0,"shooterBackground");
 
 
@@ -29,7 +29,7 @@ var shooterState = {
         //création des armes du joueur
         var weapons = [];
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
-            weapons.push(new Weapon(30,this.availableTypes[i] ));
+            weapons.push(new Weapon(30,this.availableTypes[i], 5));
         }
 
         //création joueur
@@ -68,8 +68,8 @@ var shooterState = {
     update : function(){
         
         //Déplacement du background
-        this.background.x  -= this.player.speed;
-        this.background2.x -= this.player.speed;
+        this.background.x  -= this.levelSpeed;
+        this.background2.x -= this.levelSpeed;
 
         if(this.background2.x < 0){
             this.background.x += game.global.gameWidth;
@@ -83,10 +83,22 @@ var shooterState = {
             game.state.start('worldmap');
         }
         if(this.inputManager.down.isDown){
-    		this.movePlayer(this.DOWN)
+    		this.movePlayer(this.DOWN);
     	}else if(this.inputManager.up.isDown){
-    		this.movePlayer(this.UP)
+    		this.movePlayer(this.UP);
     	}
+        
+        if(this.inputManager.right.isDown){
+            this.switchWeapon(this.DOWN);
+        }else if(this.inputManager.left.isDown){
+            this.switchWeapon(this.UP);
+        }
+        
+        //cooldown changement d'arme
+        if(this.weaponSwitchCooldown > 0){            
+            this.weaponSwitchCooldown--;
+        }
+        
         
         //mise à jour du cooldown des armes du joueur
         for(var i =0, l = this.player.weapons.length; i< l;i++){
@@ -122,12 +134,17 @@ var shooterState = {
         //Vérification collision
         game.physics.arcade.overlap(this.player.sprite, this.pickups, this.takePickup, null, this);
         game.physics.arcade.overlap(this.player.sprite, this.ennemies, this.takeDamage, null, this);
-        game.physics.arcade.overlap(this.ennemies, this.projectiles, this.todoTrouverNomCarJaiLaFlemme, null, this);
+        game.physics.arcade.overlap(this.ennemies, this.projectiles, this.collisionEnnemyProjectile, null, this);
+        
+        
+        
 
 
         
     },
 
+    
+    
     movePlayer : function(direction){
     	var newY = this.player.sprite.y + direction*(this.player.speed);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
@@ -135,6 +152,21 @@ var shooterState = {
         }
     },
 
+    //changement de l'arme du joueur
+    switchWeapon : function(direction){
+        if(this.weaponSwitchCooldown <= 0){
+            
+             this.player.selectedWeapon=(this.player.selectedWeapon+direction)%this.player.weapons.length;
+            if(this.player.selectedWeapon <0){
+                this.player.selectedWeapon = this.player.weapons.length-1;
+            }
+            console.log(this.player.selectedWeapon);
+            this.weaponSwitchCooldown=this.WEAPONSWITCHDELAY;
+            
+        }
+        
+    },
+    
     addEnnemy : function(){
         //var ennemy = new Trash(10, "metal");
         var ennemy = this.ennemies.getFirstDead();
@@ -142,22 +174,25 @@ var shooterState = {
         if(!ennemy)
             return;
 
-        ennemy.type = "plastic";
+        
+        var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
+        ennemy.type = this.availableTypes[enemyTypeId];
 
         ennemy.life   = 10;
-        var type= "plastic";
+        
+        
         var sprite = "spriteTrashPlastic";
-        if(type === "metal"){
+        if(ennemy.type === "metal"){
             sprite = "spriteTrashMetal";
-        }else if(type === "glass"){
+        }else if(ennemy.type === "glass"){
             sprite = "spriteTrashGlass";
-        }else if(type === "paper"){
+        }else if(ennemy.type === "paper"){
             sprite = "spriteTrashPaper";
-        }else if(type === "plastic"){
+        }else if(ennemy.type === "plastic"){
             sprite = "spriteTrashPlastic";
 
         }else {
-            console.log("olala un bug, faut p'tetre faire quelque chose");
+            console.log("Mauvais type d'ennemi : "+type);
         }
         ennemy.loadTexture(sprite);
         ennemy.checkWorldBounds = true;
@@ -194,12 +229,13 @@ var shooterState = {
             
 
             projectile.damage   = this.player.weapons[this.player.selectedWeapon].damage;            
-            projectile.speed = 2;
+            projectile.speed = this.player.weapons[this.player.selectedWeapon].projectileSpeed;
             
-            var type= "plastic";
-            projectile.type = "plastic";
+            var type= this.player.weapons[this.player.selectedWeapon].type;
+            projectile.type = type;
             var sprite = "spriteProjPlastic";
             if(type === "metal"){
+                
                 sprite = "spriteProjMetal";
             }else if(type === "glass"){
                 sprite = "spriteProjGlass";
@@ -209,7 +245,8 @@ var shooterState = {
                 sprite = "spriteProjPlastic";
 
             }else {
-                console.log("olala un bug, faut p'tetre faire quelque chose")
+                projectile.type = "plastic";
+                console.log("Mauvais type de projectile : "+type)
             }
 
             //Création d'un projectile
@@ -227,25 +264,23 @@ var shooterState = {
 
     },
 
-    todoTrouverNomCarJaiLaFlemme: function(ennemy, projectile){
+    collisionEnnemyProjectile: function(ennemy, projectile){
+        console.log(projectile.type+ " =? "+ennemy.type);
         if(ennemy.type === projectile.type){
+            
             ennemy.kill();
-            projectile.kill();
-            this.addPickup(ennemy.x, ennemy.y);
+            this.addPickup(ennemy.x, ennemy.y, ennemy.type);
 
-        }else{
-            projectile.kill();
         }
+        projectile.kill();
 
     },
 
     addPickup : function(x, y, type){
         //var ennemy = new Trash(10, "metal");
         var pickup = this.pickups.getFirstDead();
-            console.log("add pickup ?")
 
         if(pickup){
-            console.log("add pickup")
             pickup.type = type;
 
             var sprite = "spritePickup";
@@ -259,7 +294,7 @@ var shooterState = {
                 sprite = "spritePickup";
 
             }else {
-                console.log("olala un bug, faut p'tetre faire quelque chose");
+                console.log("Mauvais type de pickup : "+type);
             }
             pickup.loadTexture(sprite);
             pickup.checkWorldBounds = true;
