@@ -9,6 +9,10 @@ var shooterState = {
         this.proba = 0.011;//Variable pour apparition ennemies (plus elevé = plus d'ennemis)
         this.levelSpeed = 3;
         this.inputManager = new InputManager(game);
+        
+        this.shootSound = game.add.audio("shoot");
+        this.hitSound = game.add.audio("hit");
+        this.deathSound = game.add.audio("death");
     },
     
     create : function(){
@@ -142,14 +146,22 @@ var shooterState = {
     },
 
     takeDamage : function(player, ennemy){
-    	ennemy.kill();
-    	this.player.life--;
+        if(this.player.life > 0 ){
+            this.hitSound.play();
+            ennemy.kill();
+            this.player.life--;
+            //mort du joueur
+            if(this.player.life <= 0){                
+                this.deathSound.play();
+            }
+        }
+    	
     },
     fire : function(){
         //si l'arme selectionnée est dispo, on tire
         if(this.player.weapons[this.player.selectedWeapon].cooldown === 0){
             console.log("FIRE");
-
+            this.shootSound.play();
             //Création d'un projectile
             var x = this.player.sprite.x+this.player.sprite.width;
             var y = this.player.sprite.y+this.player.sprite.height/2;
