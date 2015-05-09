@@ -23,7 +23,10 @@ var shooterState = {
         this.shootSound  = game.add.audio("shoot");
         this.hitSound    = game.add.audio("hit");
         this.deathSound  = game.add.audio("death");
+        this.winSound  = game.add.audio("win");
         this.pickupSound = game.add.audio("pickup");
+        this.cleanSuccessSound = game.add.audio("cleanSuccess");
+        this.cleanFailSound = game.add.audio("cleanFail");
     },
     
     create : function(){
@@ -307,6 +310,7 @@ var shooterState = {
 
 
         if(ennemy.type === projectile.type){
+            this.cleanSuccessSound.play();
             //Parametrage particule
             this.emitterGreen.x = ennemy.x;
             this.emitterGreen.y = ennemy.y;
@@ -320,6 +324,7 @@ var shooterState = {
 
 
         }else{
+            this.cleanFailSound.play();
             this.emitterRed.x = ennemy.x;
             this.emitterRed.y = ennemy.y;
             this.emitterRed.start(true, 100, null, 15);
@@ -377,7 +382,8 @@ var shooterState = {
 
         if(this.boss.life <= 0){
             boss.kill();
-            game.state.start('menu');
+            this.winSound.play();
+            game.state.start('worldmap');
         }
 
         projectile.kill();

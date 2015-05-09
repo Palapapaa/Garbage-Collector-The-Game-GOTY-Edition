@@ -3,6 +3,14 @@ var worldmapState = {
     preload : function(){
         console.log("WorldMap state preload");
         this.inputManager = new InputManager(game);
+        this.menuItems = [
+            {"id" : "worldmap", "x" : 300},
+            {"id" : "tutorial", "x" : 400},
+            {"id" : "achievement", "x" : 500},
+        ];
+        this.selectedItem = 0;
+        this.MENUSWITCHDELAY = 15;//temps entre chaque changement d'item dans le menu
+        this.menuSwitchCooldown=0;//temps avant de changer d'item dans le menu à nouveau
     },
     
     create : function(){
