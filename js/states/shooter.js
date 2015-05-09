@@ -302,7 +302,7 @@ var shooterState = {
             //mort du joueur
             if(this.player.life <= 0){                
                 this.deathSound.play();
-                game.state.start('menu');
+                game.state.start('gameover');
             }
         }
     	
@@ -446,7 +446,7 @@ var shooterState = {
         if(this.boss.life <= 0){
             boss.kill();
             this.winSound.play();
-            game.state.start('worldmap');
+            game.state.start('quizz');
         }
 
         projectile.kill();
