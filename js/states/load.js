@@ -18,6 +18,7 @@ var loadState = {
         
         // Chargement des images
         game.load.image('menuBackground' , 'assets/graphics/background_menu.png');
+        game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
@@ -33,7 +34,8 @@ var loadState = {
         game.load.image('spriteProjPlastic' , 'assets/graphics/sprite_projectile_plastic_e1.png');
         game.load.image('spriteProjPaper' , 'assets/graphics/sprite_projectile_glass_e1.png');
         game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_paper_e1.png');
-
+        
+            
 
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         game.load.image('spritePickup' , 'assets/graphics/sprite_pickup_e1.png');
@@ -43,10 +45,20 @@ var loadState = {
         game.load.image('leftArrowPic' , 'assets/graphics/left_arrow.png');
         game.load.image('rightArrowPic' , 'assets/graphics/right_arrow.png');
         game.load.image('spaceBarPic' , 'assets/graphics/space_bar.png');
+
+        //chargement des images liées aux succès
+        game.load.image('achievementLocked' , 'assets/graphics/achievement_lock.png');
+        game.load.image('achievementUnlocked' , 'assets/graphics/achievement_unlock.png');
+        game.load.image('iconLock' , 'assets/graphics/icon_lock.png');
+        for(var i=0, l = achievements.length; i<l; i++){
+            game.load.image("icon"+achievements[i].id , 'assets/graphics/'+achievements[i].icon);
+            
+        }
         
         // Chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);
         game.load.audio('hit',['assets/audio/hit.wav',]);
+        game.load.audio('death',['assets/audio/death.wav',]);
         game.load.audio('shoot',['assets/audio/shoot.wav',]);
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    
