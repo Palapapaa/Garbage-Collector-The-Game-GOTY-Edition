@@ -3,6 +3,11 @@ var worldmapState = {
     preload : function(){
         console.log("WorldMap state preload");
         this.inputManager = new InputManager(game);
+        this.UP = -1;
+        this.DOWN = 1;
+        this.selectedItem = 1;
+        this.MENUSWITCHDELAY = 15;//temps entre chaque changement d'item dans le menu
+        this.menuSwitchCooldown=0;//temps avant de changer d'item dans le menu à nouveau
     },
     
     create : function(){
@@ -14,32 +19,60 @@ var worldmapState = {
         { font: '64px Arial', fill: '#ffffff' });
         loadingLabel.anchor.setTo(0.5, 0.5);
         
-        // Texte temporaire d'explication 
-        var explainLabel = game.add.text(game.world.centerX, 400, 'Appuyer sur S pour aller à la boutique',
-        { font: '32px Arial', fill: '#ffffff' });
-        explainLabel.anchor.setTo(0.5, 0.5);
-        explainLabel = game.add.text(game.world.centerX, 500, 'Appuyer sur Espace pour jouer',
-        { font: '32px Arial', fill: '#ffffff' });
-        explainLabel.anchor.setTo(0.5, 0.5);
-
-        var player = new Player();
-
-        var ennemies = [];
+        this.selector = game.add.sprite(levels[this.selectedItem].x,levels[this.selectedItem].y,"levelSelector");
+       this.selector.anchor.setTo(0,1);
+        //affichage des différents niveaux + shop
+        for(var i=0, l = levels.length; i<l; i++){
+            
+            
+            var levelBgIcon = game.add.sprite(levels[i].x, levels[i].y, "levelButton");
+            var levelFgIcon = game.add.sprite(levels[i].x, levels[i].y, "icon"+levels[i].id);
+            if(levels[i].cleared){
+                var levelWidget = game.add.sprite(levels[i].x, levels[i].y, "iconCleared");
+            }else if(game.global.lastLevel < levels[i].req){
+                var levelWidget = game.add.sprite(levels[i].x, levels[i].y, "iconLock");
+            }
+            
+        }
     },
     
     update : function(){
-         // Passage à l'état de jeu shooter
-        if(this.inputManager.fire.isDown){
-            game.state.start('shooter');
+        if(this.menuSwitchCooldown>0){
+            this.menuSwitchCooldown--;   
         }
-        // Passage à l'état de jeu shop
-        if(this.inputManager.shop.isDown){
-            game.state.start('shop');
-        }
-        // Passage à l'état de jeu menu
         if(this.inputManager.esc.isDown){
             game.state.start('menu');
-        }    
+        }
+        if(this.inputManager.right.isDown === true){
+            this.menuSwitch(this.DOWN);
+        }
+        if(this.inputManager.left.isDown === true){
+            this.menuSwitch(this.UP);
+        }
+        
+        // On lance l'état sélectionné
+        if(this.inputManager.select.isDown){
+            game.state.start(levels[this.selectedItem].state);
+        }
+        
+        
+    },
+    
+    //changement d'item dans le menu
+    menuSwitch : function(direction){
+        if(this.menuSwitchCooldown <= 0){
+            
+            this.selectedItem=(this.selectedItem+direction)%levels.length;
+            if(this.selectedItem <0){
+                this.selectedItem = levels.length-1;
+                
+            }
+            this.selector.x = levels[this.selectedItem].x;
+            this.selector.y = levels[this.selectedItem].y;
+            this.menuSwitchCooldown=this.MENUSWITCHDELAY;
+            
+        }
+        
     },
     
 };
