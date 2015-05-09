@@ -48,6 +48,8 @@ var shooterState = {
 		this.ennemies    = game.add.group();
         this.ennemies.enableBody = true;
         this.boss        = null;
+        this.deplacementX = 0;
+        this.deplacementY = 0;
 
         //Groupe projectiles
         this.projectiles = game.add.group();
@@ -169,6 +171,38 @@ var shooterState = {
                 game.physics.arcade.collide(this.boss, this.player);
 
             }
+        }
+
+        if(this.bossAdded === true){
+
+            //Proba de déplacement du boss
+            if(this.deplacementY <= 0 && this.deplacementX <= 0){
+                if(Math.random() < 0.3){
+                    this.deplacementX = Math.floor(((Math.random()*2)-1)* 200);
+                    this.deplacementY = Math.floor(((Math.random()*2)-1)* 200);
+
+                    var newPosX = this.boss.sprite.x + deplacementX;
+                    var newPosY = this.boss.sprite.y + deplacementY;
+
+                    if(newPosX < game.global.gameWidth && newPosX  > 0){
+                        this.boss.sprite.x = newPosX;
+                    }
+                    if(newPosY < game.global.gameHeight && newPosY > 250){
+                        this.boss.sprite.y = newPosY;
+                    }
+                }   
+            }else{
+                if(this.deplacementX < 0){
+                    var deplacementX = Math.round(Math.round()*3);
+                    this.deplacementX -= deplacementX;
+                }
+                if(this.deplacementY < 0){
+                    var deplacementY = Math.round(Math.round()*3);
+                    this.deplacementY -= deplacementY;
+
+                }
+            }
+
         }
 
         //Vérification collision
