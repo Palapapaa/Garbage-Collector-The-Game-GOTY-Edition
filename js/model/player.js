@@ -6,6 +6,5 @@ function Player(life, speed, weapons, sprite) {
 	this.sprite = game.add.sprite(10, 260,sprite);
     game.physics.arcade.enable(this.sprite);
   	//this.sprite.enableBody=true;
-
-
+  	this.sprite.animations.add('right', [1,2,3], 8, true);
 }

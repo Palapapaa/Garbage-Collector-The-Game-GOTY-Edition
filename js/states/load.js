@@ -27,6 +27,8 @@ var loadState = {
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
+        game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/spriteSheet.png', 144, 96);
+
 
         //Sprite trash
         game.load.image('spriteTrashMetal' , 'assets/graphics/sprite_trash_metal_e1.png');

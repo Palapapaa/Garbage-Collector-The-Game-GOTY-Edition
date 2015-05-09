@@ -45,7 +45,7 @@ var shooterState = {
         }
 
         // Création joueur
-        this.player = new Player(10, 2, weapons, "spritePlayer");
+        this.player = new Player(10, 2, weapons, "spriteSheetPlayer");
         
         // Définition de la barre de vie
         this.lifeTab = [];
