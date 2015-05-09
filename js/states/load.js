@@ -62,6 +62,7 @@ var loadState = {
         game.load.audio('shoot',['assets/audio/shoot.wav',]);
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    
+        game.load.audio('pickup',['assets/audio/pickup.wav',]);    
     },
     
     create : function(){
