@@ -103,7 +103,7 @@ var shooterState = {
         game.physics.arcade.collide(this.player, this.projectiles);
 
         // Particules rouges
-        this.emitterRed = game.add.emitter(0, 0 , 15);
+        this.emitterRed = game.add.emitter(0, 0 , 30);
         this.emitterRed.setXSpeed(-150, 150);
         this.emitterRed.setYSpeed(-150, 150);
         this.emitterRed.gravity = 0;
@@ -111,11 +111,19 @@ var shooterState = {
 
 
         // Particules vertes
-        this.emitterGreen = game.add.emitter(0, 0 , 15);
+        this.emitterGreen = game.add.emitter(0, 0 , 30);
         this.emitterGreen.setXSpeed(-150, 150);
         this.emitterGreen.setYSpeed(-150, 150);
         this.emitterGreen.gravity = 0;
         this.emitterGreen.makeParticles('particleGreen');
+
+        //Particules marrons
+        this.emitterBrown = game.add.emitter(0, 0 , 15);
+        this.emitterBrown.setXSpeed(-250, 250);
+        this.emitterBrown.setYSpeed(-250, 250);
+        this.emitterBrown.gravity = 0;
+        this.emitterBrown.makeParticles('particleBrown');
+
 
         console.log("shooter state create() finished");
 
@@ -502,6 +510,11 @@ var shooterState = {
             this.winSound.play();
             game.state.start('worldmap');
         }
+
+        //Parametrage particule
+        this.emitterBrown.x = this.boss.sprite.x;
+        this.emitterBrown.y = this.boss.sprite.y;
+        this.emitterBrown.start(true, 100, null, 15);
 
         projectile.kill();
 
