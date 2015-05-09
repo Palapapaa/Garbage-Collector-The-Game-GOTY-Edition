@@ -215,7 +215,7 @@ var shooterState = {
         if(ennemy.type === projectile.type){
             ennemy.kill();
             projectile.kill();
-            this.addPickup(projectile.x, projectile.y);
+            this.addPickup(ennemy.x, ennemy.y);
 
         }else{
             projectile.kill();
