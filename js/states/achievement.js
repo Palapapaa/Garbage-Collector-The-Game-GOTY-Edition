@@ -49,6 +49,26 @@ var achievementState = {
             
             achY+=48;
         }
+        
+        //affichage des totaux
+        var totalsY = 520;
+         game.add.text(90, totalsY-35, 'Déchets traités : '+game.global.totalTrash,
+        { font: '22px Arial', fill: '#888888' });
+        game.add.sprite(90, totalsY,"spritePickupMetal");
+        game.add.text(125, totalsY+10, ": " +game.global.totalMetal,
+        { font: '22px Arial', fill: '#888888' });
+        game.add.sprite(180, totalsY,"spritePickupPaper");
+        game.add.text(215, totalsY+10, ": " +game.global.totalPaper,
+        { font: '22px Arial', fill: '#888888' });
+        game.add.sprite(270, totalsY,"spritePickupGlass");
+         game.add.text(305, totalsY+10, ": " +game.global.totalGlass,
+        { font: '22px Arial', fill: '#888888' });
+        game.add.sprite(360, totalsY,"spritePickupPlastique");
+        game.add.text(395, totalsY+10, ": " +game.global.totalPlastic,
+        { font: '22px Arial', fill: '#888888' });
+        
+        
+        
     },
     
     update : function(){
