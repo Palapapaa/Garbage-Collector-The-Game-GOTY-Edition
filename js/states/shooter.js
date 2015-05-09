@@ -16,7 +16,6 @@ var shooterState = {
 
         this.nbEnnemies  = 5;
         this.stop        = false;
-
         this.bossAdded   = false;
 
         //Sons
@@ -30,8 +29,10 @@ var shooterState = {
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
         this.background2 = game.add.sprite(game.global.gameWidth,0,"shooterBackground");
-
-
+        this.barillet = game.add.sprite(704, 96, 'spriteBarillet');
+        this.barillet.anchor.setTo(0.5, 0.5);
+        this.barillet.alpha = 0.75;
+        
         //Initialisation variablles
         this.availableTypes = ["metal", "glass", "plastic", "paper"];
         
@@ -80,7 +81,6 @@ var shooterState = {
         this.emitterGreen.setYSpeed(-150, 150);
         this.emitterGreen.gravity = 0;
         this.emitterGreen.makeParticles('particleGreen');
-
 
         console.log("shooter state create() finished");
 
@@ -193,14 +193,17 @@ var shooterState = {
     //changement de l'arme du joueur
     switchWeapon : function(direction){
         if(this.weaponSwitchCooldown <= 0){
-            
              this.player.selectedWeapon=(this.player.selectedWeapon+direction)%this.player.weapons.length;
             if(this.player.selectedWeapon <0){
                 this.player.selectedWeapon = this.player.weapons.length-1;
             }
+
+            // Sprite rotate Right
+            this.barillet.angle += direction*90;
+            console.log(this.barillet.angle);
+
             console.log(this.player.selectedWeapon);
             this.weaponSwitchCooldown=this.WEAPONSWITCHDELAY;
-            
         }
         
     },
