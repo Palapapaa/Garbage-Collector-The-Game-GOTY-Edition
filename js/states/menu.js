@@ -15,8 +15,6 @@ var menuState = {
         
         this.bgm.loop= true;
         //this.bgm.play();
-        
-        
     },
     
     update : function(){
