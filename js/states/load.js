@@ -27,11 +27,8 @@ var loadState = {
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
-        
-        
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
         game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/sprite_joueur.png', 144, 96);
-
 
         //Sprite trash
         game.load.image('spriteTrashMetal' , 'assets/graphics/sprite_trash_metal_e1.png');
@@ -54,9 +51,11 @@ var loadState = {
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         
         // Sprites UI
+        // Vie
         game.load.image('spriteLifeHalf' , 'assets/graphics/sprite_life_half.png');
         game.load.image('spriteLifeFull' , 'assets/graphics/sprite_life_full.png');
-        game.load.image('spriteBarillet' , 'assets/graphics/sprite_barillet.png');
+        // Barillet
+        game.load.spritesheet('spriteSheetBarillet' , 'assets/graphics/sprite_barillet.png', 128, 128);
 
         //Pickup
         game.load.image('spritePickupGlass' , 'assets/graphics/sprite_pickup_glass_e1.png');
