@@ -49,6 +49,11 @@ var shooterState = {
 
         // Création joueur
         this.player = new Player(10, 2, weapons, "spritePlayer");
+
+        //Ajout de l'aspirateur sur le joueur
+        this.aspirateur = game.add.sprite(this.player.sprite.x+26, this.player.sprite.y-3, "spriteAspirateur");
+        game.physics.arcade.enable(this.aspirateur);
+
         
         // Définition de la barre de vie
         this.lifeTab = [];
@@ -73,7 +78,7 @@ var shooterState = {
         this.pickups.enableBody = true;
 
         this.pickups.createMultiple(25, "spritePickupMetal");
-        game.physics.arcade.collide(this.player, this.pickups);
+        game.physics.arcade.collide(this.aspirateur, this.pickups);
 
         this.ennemies.createMultiple(25, "spriteTrashPlastic");
         game.physics.arcade.collide(this.player, this.ennemies);
@@ -218,7 +223,7 @@ var shooterState = {
         }
 
         //Vérification collision
-        game.physics.arcade.overlap(this.player.sprite, this.pickups, this.takePickup, null, this);
+        game.physics.arcade.overlap(this.aspirateur, this.pickups, this.takePickup, null, this);
         game.physics.arcade.overlap(this.player.sprite, this.ennemies, this.takeDamage, null, this);
         game.physics.arcade.overlap(this.ennemies, this.projectiles, this.collisionEnnemyProjectile, null, this);
         //game.physics.arcade.overlap(this.ennemies, this.projectiles, this.todoTrouverNomCarJaiLaFlemme, null, this);
@@ -233,6 +238,7 @@ var shooterState = {
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - (this.player.sprite.height/2) &&newY+(this.player.sprite.height/2)<=this.LEVELBOTTOM)){
     		this.player.sprite.y = newY;
             this.player.sprite.animations.play('move');
+            this.aspirateur.y += direction*(this.player.speed);
         }
     },
 
