@@ -18,6 +18,8 @@ var shooterState = {
         this.stop        = false;
         this.bossAdded   = false;
 
+        this.score       = 0;
+
         //Sons
         this.shootSound  = game.add.audio("shoot");
         this.hitSound    = game.add.audio("hit");
@@ -26,13 +28,23 @@ var shooterState = {
         this.pickupSound = game.add.audio("pickup");
         this.cleanSuccessSound = game.add.audio("cleanSuccess");
         this.cleanFailSound = game.add.audio("cleanFail");
+
+
+
     },
     
     create : function(){
+
+
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
         this.background2 = game.add.sprite(game.global.gameWidth,0,"shooterBackground");
         
+
+        this.scoreLabel = game.add.text(game.world.centerX, 50, "Score : "+this.score,
+        { font: '32px Arial', fill: '#FFFF00' });
+        this.scoreLabel.anchor.setTo(0.5, 0.5);
+
         // Définition du Barillet
         this.barillet = game.add.sprite(704, 96, 'spriteBarillet');
         this.barillet.anchor.setTo(0.5, 0.5);
@@ -324,7 +336,6 @@ var shooterState = {
             projectile.type = type;
             var sprite = "spriteProjPlastic";
             if(type === "metal"){
-                
                 sprite = "spriteProjMetal";
             }else if(type === "glass"){
                 sprite = "spriteProjGlass";
@@ -381,6 +392,9 @@ var shooterState = {
 
             //Destruction ennemi
             ennemy.kill();
+            this.score += 10;
+            this.updateTextScore();
+
 
             //création pickup
             this.addPickup(ennemy.x, ennemy.y, ennemy.type);
@@ -428,13 +442,19 @@ var shooterState = {
         game.global.totalTrash++;
         if(pickup.type === "metal"){
             game.global.totalMetal++;
+            game.global.stockMetal++;
         }else if(pickup.type === "glass"){
             game.global.totalVerre++;
+            game.global.stockVerre++;
         }else if(pickup.type === "paper"){
             game.global.totalPaper++;
+            game.global.stockPaper++;
         }else if(pickup.type === "plastic"){
             game.global.totalPlastic++;
+            game.global.stockPlastic++;
         }
+        this.score += 15;
+        this.updateTextScore();
 
         pickup.kill();
         this.pickupSound.play();
@@ -445,6 +465,8 @@ var shooterState = {
 
         if(this.boss.life <= 0){
             boss.kill();
+            this.score += 100;
+            this.updateTextScore();
             this.winSound.play();
             game.state.start('worldmap');
         }
@@ -483,5 +505,9 @@ var shooterState = {
         ennemy.checkWorldBounds = true;
         ennemy.outOfBoundsKill = true;
         ennemy.reset(this.boss.sprite.x  -10, this.boss.sprite.y);  
+    },
+
+    updateTextScore : function(){
+        this.scoreLabel.setText("Score : "+this.score);
     }
 }; 
