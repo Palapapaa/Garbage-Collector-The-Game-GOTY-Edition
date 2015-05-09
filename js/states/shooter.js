@@ -79,13 +79,14 @@ var shooterState = {
 
         //A voir si on fera vraiment comme ça ...
         // Passage à l'état de jeu world map
-        if(this.inputManager.esc.isDown){
+        if(this.inputManager.esc.isDown === true){
             game.state.start('worldmap');
         }
-        if(this.inputManager.down.isDown){
-    		this.movePlayer(this.DOWN)
-    	}else if(this.inputManager.up.isDown){
-    		this.movePlayer(this.UP)
+        if(this.inputManager.down.isDown === true){
+    		this.movePlayer(this.DOWN);
+    	}
+        if(this.inputManager.up.isDown === true){
+    		this.movePlayer(this.UP);
     	}
         
         //mise à jour du cooldown des armes du joueur
@@ -226,6 +227,7 @@ var shooterState = {
 
     },
 
+    //Fonction de collision entre projectile et ennemis
     todoTrouverNomCarJaiLaFlemme: function(ennemy, projectile){
         if(ennemy.type === projectile.type){
             ennemy.kill();
@@ -268,6 +270,18 @@ var shooterState = {
     },
 
     takePickup : function(player, pickup){
+
+        game.global.totalTrash++;
+        if(pickup.type === "metal"){
+            game.global.totalMetal++;
+        }else if(pickup.type === "glass"){
+            game.global.totalVerre++;
+        }else if(pickup.type === "paper"){
+            game.global.totalPaper++;
+        }else if(pickup.type === "plastic"){
+            game.global.totalPlastic++;
+        }
+
         pickup.kill();
         this.pickupSound.play();
     }
