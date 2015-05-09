@@ -14,7 +14,7 @@ var shooterState = {
         this.levelSpeed = 3;
         this.inputManager = new InputManager(game);
 
-        this.nbEnnemies  = 5;
+        this.nbEnnemies  = 25;
         this.stop        = false;
 
         this.bossAdded   = false;
