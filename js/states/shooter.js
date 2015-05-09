@@ -13,6 +13,7 @@ var shooterState = {
         this.shootSound = game.add.audio("shoot");
         this.hitSound = game.add.audio("hit");
         this.deathSound = game.add.audio("death");
+        this.pickupSound = game.add.audio("pickup");
     },
     
     create : function(){
@@ -269,5 +270,6 @@ var shooterState = {
 
     takePickup : function(player, pickup){
         pickup.kill();
+        this.pickupSound.play();
     }
 };
