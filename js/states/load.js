@@ -4,17 +4,21 @@ var loadState = {
         console.log("Load state preload");
         
         // Affichage de l'image de fond
-        var background = game.add.sprite(0,0,"mainBackground");
+        var background = game.stage.backgroundColor = '#199BC4';
 
         // Affichage du texte de chargement
-        var loadingLabel = game.add.text(game.world.centerX, 200, 'Chargement...',
+        var loadingLabel = game.add.text(game.world.centerX, 175, 'Chargement...',
         { font: '96px Arial', fill: '#ffffff' });
         loadingLabel.anchor.setTo(0.5, 0.5);
         
         // Affichage de la progress bar
-        var progressBar = game.add.sprite(game.world.centerX, 300, 'progressBar');
-        progressBar.anchor.setTo(0.5, 0.5);
-        game.load.setPreloadSprite(progressBar);
+        //This is the bright blue bar that is hidden by the dark bar
+        this.barBg = game.add.sprite(game.world.centerX, game.world.centerY + 80, 'progress_bar_bg');
+        this.barBg.anchor.setTo(0.5, 0.5);
+        //This bar will get cropped by the setPreloadSprite function as the game loads!
+        this.bar = game.add.sprite(game.world.centerX - 240, game.world.centerY + 80, 'progress_bar');
+        this.bar.anchor.setTo(0, 0.5);
+        game.load.setPreloadSprite(this.bar);
         
         // Chargement des images
         game.load.image('menuBackground' , 'assets/graphics/background_menu.png');
@@ -32,11 +36,15 @@ var loadState = {
         //Sprite projectiles
         game.load.image('spriteProjMetal' , 'assets/graphics/sprite_projectile_metal_e1.png');
         game.load.image('spriteProjPlastic' , 'assets/graphics/sprite_projectile_plastic_e1.png');
+
         game.load.image('spriteProjPaper' , 'assets/graphics/sprite_projectile_paper_e1.png');
         game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_glass_e1.png');
         
         game.load.image('spriteBoss' , 'assets/graphics/sprite_boss.png');
-        
+
+        game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
+        game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
+
 
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         game.load.image('spritePickup' , 'assets/graphics/sprite_pickup_e1.png');
@@ -63,7 +71,7 @@ var loadState = {
         game.load.audio('shoot',['assets/audio/shoot.wav',]);
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    
-        game.load.audio('pickup',['assets/audio/pickup.wav',]);    
+        game.load.audio('pickup',['assets/audio/pickup.wav',]);
     },
     
     create : function(){

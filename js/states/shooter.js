@@ -66,6 +66,21 @@ var shooterState = {
         this.projectiles.createMultiple(25, "spriteProjMetal");
         game.physics.arcade.collide(this.player, this.projectiles);
 
+        //particules rouges
+        this.emitterRed = game.add.emitter(0, 0 , 15);
+        this.emitterRed.setXSpeed(-150, 150);
+        this.emitterRed.setYSpeed(-150, 150);
+        this.emitterRed.gravity = 0;
+        this.emitterRed.makeParticles('particleRed');
+
+
+        //particules vertes
+        this.emitterGreen = game.add.emitter(0, 0 , 15);
+        this.emitterGreen.setXSpeed(-150, 150);
+        this.emitterGreen.setYSpeed(-150, 150);
+        this.emitterGreen.gravity = 0;
+        this.emitterGreen.makeParticles('particleGreen');
+
 
         console.log("shooter state create() finished");
 
@@ -289,11 +304,25 @@ var shooterState = {
 
     //Fonction de collision entre projectile et ennemis
     collisionEnnemyProjectile: function(ennemy, projectile){
+
+
         if(ennemy.type === projectile.type){
-            
+            //Parametrage particule
+            this.emitterGreen.x = ennemy.x;
+            this.emitterGreen.y = ennemy.y;
+            this.emitterGreen.start(true, 100, null, 15);
+
+            //Destruction ennemi
             ennemy.kill();
+
+            //création pickup
             this.addPickup(ennemy.x, ennemy.y, ennemy.type);
 
+
+        }else{
+            this.emitterRed.x = ennemy.x;
+            this.emitterRed.y = ennemy.y;
+            this.emitterRed.start(true, 100, null, 15);
         }
         projectile.kill();
 
