@@ -49,7 +49,10 @@ var shooterState = {
         this.ennemies.enableBody = true;
         this.boss        = null;
         this.deplacementX = 0;
+        this.dirX         = 1;//Direction du déplacement (-1 ou 1)
         this.deplacementY = 0;
+        this.dirY         = 1;//Direction du déplacement (-1 ou 1)
+
 
         //Groupe projectiles
         this.projectiles = game.add.group();
@@ -174,34 +177,22 @@ var shooterState = {
         }
 
         if(this.bossAdded === true){
-
-            //Proba de déplacement du boss
-            if(this.deplacementY <= 0 && this.deplacementX <= 0){
-                if(Math.random() < 0.3){
-                    this.deplacementX = Math.floor(((Math.random()*2)-1)* 200);
-                    this.deplacementY = Math.floor(((Math.random()*2)-1)* 200);
-
-                    var newPosX = this.boss.sprite.x + deplacementX;
-                    var newPosY = this.boss.sprite.y + deplacementY;
-
-                    if(newPosX < game.global.gameWidth && newPosX  > 0){
-                        this.boss.sprite.x = newPosX;
-                    }
-                    if(newPosY < game.global.gameHeight && newPosY > 250){
-                        this.boss.sprite.y = newPosY;
-                    }
-                }   
+            this.boss.j++;
+            //Si boss n'est pas en déplacement
+            if(this.deplacementX <= 0 && this.deplacementY <= 0){
+                //Proba de déplacement du boss
+                if(Math.random() < 0.1){
+                    this.deplacementX = Math.round(Math.random()*800);
+                    this.dirX         = (Math.round(Math.random())-0.5)*2;
+                    this.deplacementY = Math.round(Math.random()*350);
+                    this.dirY         = (Math.round(Math.random())-0.5)*2;
+                }
+            //Si boss en déplacement, on le fait
             }else{
-                if(this.deplacementX < 0){
-                    var deplacementX = Math.round(Math.round()*3);
-                    this.deplacementX -= deplacementX;
-                }
-                if(this.deplacementY < 0){
-                    var deplacementY = Math.round(Math.round()*3);
-                    this.deplacementY -= deplacementY;
-
-                }
+              //  var currentDep
             }
+
+  
 
         }
 
@@ -213,6 +204,7 @@ var shooterState = {
         if(this.bossAdded === true){
             game.physics.arcade.overlap(this.boss.sprite, this.projectiles, this.damageBoss, null, this);
         }
+
     },
 
     
