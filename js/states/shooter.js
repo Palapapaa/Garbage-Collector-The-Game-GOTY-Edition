@@ -176,7 +176,6 @@ var shooterState = {
             //On stop l'apparition des ennemies
             game.time.events.remove(this.loopEnnemies);
             //Affichage du boss
-            console.log("ajout boss")
             this.boss = new Boss(42, "spriteBoss", null);
             this.bossAdded = true;
             game.physics.arcade.collide(this.boss ,this.projectiles);
@@ -247,9 +246,7 @@ var shooterState = {
 
             // Sprite rotate Right
             this.barillet.angle += direction*90;
-            console.log(this.barillet.angle);
 
-            console.log(this.player.selectedWeapon);
             this.weaponSwitchCooldown=this.WEAPONSWITCHDELAY;
         }
         
@@ -451,7 +448,6 @@ var shooterState = {
     },
 
     bossAddEnnemy : function(){
-        console.log("boss add ennem")
         var ennemy = this.ennemies.getFirstDead();
 
         if(!ennemy)
