@@ -55,6 +55,11 @@ var shooterState = {
 		this.ennemies    = game.add.group();
         this.ennemies.enableBody = true;
         this.boss        = null;
+        this.deplacementX = 0;
+        this.dirX         = 1;//Direction du déplacement (-1 ou 1)
+        this.deplacementY = 0;
+        this.dirY         = 1;//Direction du déplacement (-1 ou 1)
+
 
         // Groupe projectiles
         this.projectiles = game.add.group();
@@ -92,7 +97,7 @@ var shooterState = {
 
 		this.proba = 0.011;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
 
-        game.time.events.loop(1000, this.addEnnemy, this);
+        this.loopEnnemies = game.time.events.loop(1000, this.addEnnemy, this);
     },
     
     update : function(){
@@ -163,18 +168,51 @@ var shooterState = {
 
         }
 
-        if(this.nbEnnemies < 0){
+        //Les ennemies ont été butés, apparition du boss
+        if(this.nbEnnemies < 0 && this.bossAdded === false){
             //On stop l'apparition des ennemies
-            game.time.events.stop();
+            game.time.events.remove(this.loopEnnemies);
             //Affichage du boss
-            if(this.bossAdded === false){
-                console.log("ajout boss")
-                this.boss = new Boss(42, "spriteBoss", null);
-                this.bossAdded = true;
-                game.physics.arcade.collide(this.boss ,this.projectiles);
-                game.physics.arcade.collide(this.boss, this.player);
+            console.log("ajout boss")
+            this.boss = new Boss(42, "spriteBoss", null);
+            this.bossAdded = true;
+            game.physics.arcade.collide(this.boss ,this.projectiles);
+            game.physics.arcade.collide(this.boss, this.player);
 
+            game.time.events.loop(1000, this.bossAddEnnemy, this);
+
+        }
+
+        if(this.bossAdded === true){
+
+            if(this.boss.sprite.x > 300){
+                this.boss.sprite.x--;
             }
+
+            //Les déplacements de boss c'est chiant --""
+            //Si boss n'est pas en déplacement
+            if( this.deplacementY <= 0){
+                //Proba de déplacement du boss
+                if(Math.random() < 0.05){
+                    this.deplacementY = Math.round(Math.random()*50);
+                    this.dirY         = (Math.round(Math.random())-0.5)*2;
+                }
+            //Si boss en déplacement, on le fait
+            }else{
+                var currentDepY =  Math.round(Math.random());
+
+                this.deplacementY -= currentDepY;
+
+                var newPosY = this.boss.sprite.y + (currentDepY * this.dirY);
+
+                if(newPosY > 250 && newPosY < (game.global.gameHeight - this.boss.sprite.height)){
+                    this.boss.sprite.y = newPosY;
+                }else{
+                    this.dirY = -this.dirY;
+
+                }
+            }
+
         }
 
         //Vérification collision
@@ -185,6 +223,7 @@ var shooterState = {
         if(this.bossAdded === true){
             game.physics.arcade.overlap(this.boss.sprite, this.projectiles, this.damageBoss, null, this);
         }
+
     },
     
     movePlayer : function(direction){
@@ -402,5 +441,38 @@ var shooterState = {
 
         projectile.kill();
 
+    },
+
+    bossAddEnnemy : function(){
+        console.log("boss add ennem")
+        var ennemy = this.ennemies.getFirstDead();
+
+        if(!ennemy)
+            return;
+
+        
+        var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
+        ennemy.type = this.availableTypes[enemyTypeId];
+
+        ennemy.life   = 10;
+        
+        
+        var sprite = "spriteTrashPlastic";
+        if(ennemy.type === "metal"){
+            sprite = "spriteTrashMetal";
+        }else if(ennemy.type === "glass"){
+            sprite = "spriteTrashGlass";
+        }else if(ennemy.type === "paper"){
+            sprite = "spriteTrashPaper";
+        }else if(ennemy.type === "plastic"){
+            sprite = "spriteTrashPlastic";
+
+        }else {
+            console.log("Mauvais type d'ennemi : "+type);
+        }
+        ennemy.loadTexture(sprite);
+        ennemy.checkWorldBounds = true;
+        ennemy.outOfBoundsKill = true;
+        ennemy.reset(this.boss.sprite.x  -10, this.boss.sprite.y);  
     }
-};
+}; 
