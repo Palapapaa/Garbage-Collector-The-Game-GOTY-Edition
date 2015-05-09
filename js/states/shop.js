@@ -6,8 +6,8 @@ var shopState = {
     },
     
     create : function(){
-        // Affichage de l'image de fond
-        var background = game.add.sprite(0,0,"mainBackground");
+        // Affichage du fond
+        var background = game.stage.backgroundColor = '#199BC4';
         
         // Affichage du Titre du menu
         var loadingLabel = game.add.text(game.world.centerX, 100, 'Boutique',
