@@ -26,8 +26,6 @@ var loadState = {
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
         
-        game.load.image('levelSelector' , 'assets/graphics/level_selector.png');
-        game.load.image('levelButton' , 'assets/graphics/level_button.png');
         
         
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
@@ -74,6 +72,17 @@ var loadState = {
             game.load.image("icon"+achievements[i].id , 'assets/graphics/'+achievements[i].icon);
             
         }
+        
+        //chargement des images liées aux niveaux
+        game.load.image('levelSelector' , 'assets/graphics/level_selector.png');
+        game.load.image('levelButton' , 'assets/graphics/level_button.png');
+        game.load.image('iconCleared' , 'assets/graphics/icon_cleared.png');
+        for(var i=0, l = levels.length; i<l; i++){
+            game.load.image("icon"+levels[i].id , 'assets/graphics/'+levels[i].icon);
+            
+        }
+        
+        
         
         // Chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);

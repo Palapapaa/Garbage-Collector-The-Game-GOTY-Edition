@@ -1,18 +1,55 @@
 var levels = [
     
     
+     {   
+        id : "Shop",
+        state : "shop",
+        icon : "icon_shop.png",
+        req : 0,
+        x : 150,
+        y : 200,
+        cleared : false,
+         
     
-    //canette acier : 5g, poids tour eiffel : 10100 tonnes, pop france :65M 
+    },
     {   
-         id : "level1",
-         state : "level",
-         desc : "Si tout le monde recyclait autant de métal que vous en France,\non pourrait faire une deuxième tour Eiffel!",
-         icon : "icon_eiffel.png",
-         type : "metal",
-         req : 8,
+        id : "Level1",
+        state : "shooter",
+        icon : "icon_level1.png",
+        req : 0,
+        x : 225,
+        y : 200,
+        reward: 1,
+        cleared : true,
+         
+    
+    }, 
+    {   
+        id : "Level2",
+        state : "shooter",
+        icon : "icon_level2.png",
+        req : 1,
+        x : 300,
+        y : 200,
+        reward: 2,
+        cleared : false,
+         
+    
+    }, 
+    {   
+        id : "Level3",
+        state : "shooter",
+        icon : "icon_level3.png",
+        req : 2,
+        x : 375,
+        y : 200,
+        reward: 3,
+        cleared : false,
+         
     
     }, 
     
     
     
-    ];
+    
+];

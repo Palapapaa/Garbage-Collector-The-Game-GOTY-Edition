@@ -15,6 +15,7 @@ window.onload = function() {
         totalPaper : 0,
         totalPlastic : 0,
         possibleTypes : ["metal", "glass", "plastic", "paper"],
+        lastLevel : 1,
     }
     
     // Ajout de tous les états du jeu
