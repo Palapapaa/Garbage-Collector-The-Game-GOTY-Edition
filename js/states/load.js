@@ -29,7 +29,7 @@ var loadState = {
         
         
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
-        game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/spriteSheet.png', 144, 96);
+        game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/sprite_joueur.png', 144, 96);
 
 
         //Sprite trash
