@@ -491,8 +491,8 @@ var shooterState = {
             game.global.totalMetal++;
             game.global.stockMetal++;
         }else if(pickup.type === "glass"){
-            game.global.totalVerre++;
-            game.global.stockVerre++;
+            game.global.totalGlass++;
+            game.global.stockGlass++;
         }else if(pickup.type === "paper"){
             game.global.totalPaper++;
             game.global.stockPaper++;
