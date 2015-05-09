@@ -9,7 +9,7 @@ window.onload = function() {
         enterLastValue : false,
         gameWidth : 800,
         gameHeight : 600,
-        totalTrash : 45,
+        totalTrash : 0,
         totalMetal : 0,
         totalVerre : 0,
         totalPaper : 0,
