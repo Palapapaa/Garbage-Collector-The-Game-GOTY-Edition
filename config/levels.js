@@ -1,7 +1,7 @@
 var levels = [
     
     
-     {   
+    /* {   
         id : "Shop",
         state : "shop",
         icon : "icon_shop.png",
@@ -10,7 +10,7 @@ var levels = [
         y : 200,
          
     
-    },
+    },*/
     {   
         id : "Level1",
         state : "shooter",

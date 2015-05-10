@@ -5,7 +5,7 @@ var worldmapState = {
         this.inputManager = new InputManager(game);
         this.UP = -1;
         this.DOWN = 1;
-        this.selectedItem = 1;
+        this.selectedItem = 0;
         this.MENUSWITCHDELAY = 15;//temps entre chaque changement d'item dans le menu
         this.menuSwitchCooldown=0;//temps avant de changer d'item dans le menu à nouveau
     },
@@ -81,7 +81,7 @@ var worldmapState = {
     levelSelect : function(){
         //on lance le niveau selectionné si débloqué
         if(game.global.lastLevel >= levels[this.selectedItem].req){
-                game.state.start(levels[this.selectedItem].state, false, false,levels[this.selectedItem]);
+                game.state.start(levels[this.selectedItem].state, true, false,levels[this.selectedItem]);
             this.pickupSound.play();
         }else{
             this.hitSound.play();

@@ -88,7 +88,7 @@ var shooterState = {
         // Création des armes du joueur
         this.weapons = [];
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
-            this.weapons.push(new Weapon(30,this.availableTypes[i], 5, 2));
+            this.weapons.push(new Weapon(30,game.global.possibleTypes[i], 5, 2));
         }
         
         // Définition du barillet
@@ -322,12 +322,7 @@ var shooterState = {
             game.physics.arcade.overlap(this.player.body, this.ennemies, this.takeDamage, null, this);
         }
 
-        //Achievement Unlock
-        if(!this.achUnlock && game.global.totalMetal == 1)
-        {
-            this.achUnlock = true;
-            this.showPopup('Heavy and Metal');
-        }
+        
         
         //Les ennemies ont été butés, apparition du boss
         if(this.nbEnnemies < 0 && this.bossAdded === false){
@@ -589,6 +584,12 @@ var shooterState = {
             if(pickup.type === "metal"){
                 ++game.global.totalMetal;
                 ++game.global.stockMetal;
+ //TODO BOUGER SSA               //Achievement Unlock
+                if(!this.achUnlock && game.global.totalMetal === 8)
+                {
+                    this.achUnlock = true;
+                    this.showPopup('Heavy and Metal');
+                }
             }else if(pickup.type === "glass"){
                 ++game.global.totalGlass;
                 ++game.global.stockGlass;
