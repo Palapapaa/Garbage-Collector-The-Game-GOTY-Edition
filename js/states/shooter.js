@@ -210,11 +210,18 @@ var shooterState = {
         this.availableBonusType = ['battery','bulb'];
 
         // Création de la popup d'achivements
-        this.popup = game.add.sprite(580,600,"achievementPopup");
-        this.popup.alpha = 0.5;
-        this.popupTitle = game.add.text(680, 630, "Succès débloqué",
-        { font: 'bold 20px Arial', fill: '#ffffff' });
-        this.popupTitle.anchor.setTo(0.5, 0.5);
+        this.popupElements = {
+            "background" : game.add.sprite(580,600,"achievementPopup").anchor.setTo(0, 0), 
+            "title" : game.add.text(600, 630, "Succès débloqué",
+        { font: 'bold 20px Arial', fill: '#ffffff' }),
+            "label" :game.add.text(680, 670, "",
+        { font: '18px Arial', fill: '#ffffff' }),
+            "bgicon":game.add.sprite(590,630,"achievementUnlocked"),
+            "fgicon":game.add.sprite(590,630,"iconLock"),
+            
+        }
+        this.popupElements.background.alpha = 0.5;
+        this.popupElements.title;
         this.achUnlock = false;
     },
     
@@ -585,10 +592,11 @@ var shooterState = {
                 ++game.global.totalMetal;
                 ++game.global.stockMetal;
  //TODO BOUGER SSA               //Achievement Unlock
-                if(!this.achUnlock && game.global.totalMetal === 8)
+                if(!this.achUnlock && game.global.totalMetal === 1)
                 {
+                    var selectedAch = 1;
                     this.achUnlock = true;
-                    this.showPopup('Heavy and Metal');
+                    this.showPopup(selectedAch);
                 }
             }else if(pickup.type === "glass"){
                 ++game.global.totalGlass;
@@ -700,21 +708,25 @@ var shooterState = {
         }
     },
     
-    showPopup : function(text){
+    showPopup : function(ach){
         // Achievement Popup animation
-        this.popupLabel = game.add.text(680, 670, text,
-        { font: '18px Arial', fill: '#ffffff' });
-        this.popupLabel.anchor.setTo(0.5, 0.5);
-        tweenShow = game.add.tween(this.popup).to({"y" : this.popup.y-100}, 2000, Phaser.Easing.Linear.None, true);
-        game.add.tween(this.popupTitle).to({"y" : this.popupTitle.y-100}, 2000, Phaser.Easing.Linear.None, true);
-        game.add.tween(this.popupLabel).to({"y" : this.popupLabel.y-100}, 2000, Phaser.Easing.Linear.None, true);
+        this.popupElements.label = game.add.text(680, 670, ach.name,
+        { font: '18px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        //this.popupElements.label
+        game.add.tween(this.popupElements.background).to({"y" : game.global.gameHeight-100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.title).to({"y" : game.global.gameHeight-100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.label).to({"y" : game.global.gameHeight-100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.bgicon).to({"y" : game.global.gameHeight-100}, 2000, Phaser.Easing.Linear.None, true);
+       tweenShow =  game.add.tween(this.popupElements.fgicon).to({"y" : game.global.gameHeight-100}, 2000, Phaser.Easing.Linear.None, true);
         tweenShow.onComplete.addOnce(this.hidePopup, this);
     },
     
     hidePopup : function(){
         // Achievement Popout animation
-        tweenHide = game.add.tween(this.popup).to({"y" : this.popup.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
-        game.add.tween(this.popupTitle).to({"y" : this.popupTitle.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
-        game.add.tween(this.popupLabel).to({"y" : this.popupLabel.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
+        tweenHide = game.add.tween(this.popupElements.background).to({"y" : game.global.gameHeight+100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.title).to({"y" : game.global.gameHeight+100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.label).to({"y" : game.global.gameHeight+100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.bgicon).to({"y" : game.global.gameHeight+100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.fgicon).to({"y" : game.global.gameHeight+100}, 2000, Phaser.Easing.Linear.None, true);
     }
 }; 
