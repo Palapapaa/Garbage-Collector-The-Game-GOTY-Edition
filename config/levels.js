@@ -8,7 +8,6 @@ var levels = [
         req : 0,
         x : 150,
         y : 200,
-        cleared : false,
          
     
     },
@@ -19,8 +18,11 @@ var levels = [
         req : 0,
         x : 225,
         y : 200,
+        background: "level1Background",
+        ennemies : 17,
+        ennemySpawnInterval : 1500,
+        levelSpeed : 3,
         reward: 1,
-        cleared : true,
          
     
     }, 
@@ -31,8 +33,11 @@ var levels = [
         req : 1,
         x : 300,
         y : 200,
+        background: "level2Background",
+        ennemies : 20,
+        ennemySpawnInterval : 1400,
+        levelSpeed : 4,
         reward: 2,
-        cleared : false,
          
     
     }, 
@@ -43,8 +48,11 @@ var levels = [
         req : 2,
         x : 375,
         y : 200,
+        background: "level3Background",
+        ennemies : 25,
+        ennemySpawnInterval : 1100,
+        levelSpeed : 5,
         reward: 3,
-        cleared : false,
          
     
     }, 
