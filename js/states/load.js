@@ -47,11 +47,12 @@ var loadState = {
         game.load.image('spriteBoss1' , 'assets/graphics/sprite_boss1.png');
         game.load.image('spriteBoss1Damaged' , 'assets/graphics/sprite_boss1_Damaged.png');
 
-        game.load.image('smoke', 'assets/smoke-puff.png');
+        //game.load.image('smoke', 'assets/smoke-puff.png');
 
         game.load.image('particleRed' , 'assets/graphics/pixel_red.png');
         game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
         game.load.image('particleBrown' , 'assets/graphics/pixel_brown.png');
+        game.load.image('particleSmoke' , 'assets/graphics/smoke.png');
 
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         
@@ -106,6 +107,7 @@ var loadState = {
         game.load.audio('pickup',['assets/audio/pickup.wav',]);
         game.load.audio('cleanSuccess',['assets/audio/clean_success.wav',]);
         game.load.audio('cleanFail',['assets/audio/clean_fail.wav',]);
+        game.load.audio('bossTrashSpawn',['assets/audio/boss_trash_spawn.wav',]);
     },
     
     create : function(){

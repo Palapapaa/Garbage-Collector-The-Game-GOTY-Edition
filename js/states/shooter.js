@@ -13,7 +13,7 @@ var shooterState = {
         this.levelSpeed = 3;
         this.inputManager = new InputManager(game);
 
-        this.nbEnnemies  = 25;
+        this.nbEnnemies  = 15;
         this.stop        = false;
         this.bossAdded   = false;
 
@@ -27,6 +27,7 @@ var shooterState = {
         this.pickupSound = game.add.audio("pickup");
         this.cleanSuccessSound = game.add.audio("cleanSuccess");
         this.cleanFailSound = game.add.audio("cleanFail");
+        this.bossTrashSpawnSound = game.add.audio("bossTrashSpawn");
 
         this.playerBlink     = false;
         this.playerBlinkCpt  = 60;
@@ -155,6 +156,14 @@ var shooterState = {
         this.emitterBrown.gravity = 0;
         this.emitterBrown.makeParticles('particleBrown');
 
+        //Particules fumée
+        this.emitterSmoke = game.add.emitter(0, 0 , 45);
+        this.emitterSmoke.setXSpeed(-100, -80);
+        this.emitterSmoke.setYSpeed(-25, 25);
+        this.emitterSmoke.gravity = 0;
+        this.emitterSmoke.minParticleScale = 0.7;
+        this.emitterSmoke.maxParticleScale = 1.9;
+        this.emitterSmoke.makeParticles('particleSmoke');
 
         console.log("shooter state create() finished");
 
@@ -254,8 +263,8 @@ var shooterState = {
 
             game.time.events.loop(1000, this.bossAddEnnemy, this);
 
+        //maj du BOSS
         }else if(this.bossAdded === true){
-
             if(this.boss.sprite.x > 300){
                 --this.boss.sprite.x;
             }
@@ -283,6 +292,12 @@ var shooterState = {
 
                 }
             }
+            //particules de fumée du camion
+            //Parametrage particule
+            this.emitterSmoke.x = this.boss.sprite.x;
+            this.emitterSmoke.y = this.boss.sprite.y+3*this.boss.sprite.height/4;
+            this.emitterSmoke.start(true, 800, null, 0.1);
+
             game.physics.arcade.overlap(this.boss.sprite, this.projectiles, this.damageBoss, null, this);
         }
 
@@ -347,7 +362,7 @@ var shooterState = {
         ennemy.loadTexture(sprite);
         ennemy.checkWorldBounds = true;
         ennemy.outOfBoundsKill = true;
-        ennemy.reset(((Math.random()*100) + 700) , ((Math.random() * 328)+250));
+        ennemy.reset(800 , ((Math.random() * 328)+250));
 
         --this.nbEnnemies;   
 
@@ -395,8 +410,8 @@ var shooterState = {
             }
 
             //Création d'un projectile
-            var x = this.player.sprite.x+this.player.sprite.width;
-            var y = this.player.sprite.y+this.player.sprite.height/2;
+            var x = this.player.sprite.x+3*this.player.sprite.width/4;
+            var y = this.player.sprite.y+this.player.sprite.height/3;
             //this.sprite = game.add.sprite(x ,y,sprite);
             projectile.loadTexture(sprite);
             projectile.checkWorldBounds = true;
@@ -429,8 +444,8 @@ var shooterState = {
         if(ennemy.type === projectile.type){
             this.cleanSuccessSound.play();
             //Parametrage particule
-            this.emitterGreen.x = ennemy.x;
-            this.emitterGreen.y = ennemy.y;
+            this.emitterGreen.x = projectile.x+ projectile.width;
+            this.emitterGreen.y = projectile.y+ projectile.height /2;
             this.emitterGreen.start(true, 100, null, 15);
 
             //Destruction ennemi
@@ -442,8 +457,8 @@ var shooterState = {
             this.addPickup(ennemy.x, ennemy.y, ennemy.type);
         }else{
             this.cleanFailSound.play();
-            this.emitterRed.x = ennemy.x;
-            this.emitterRed.y = ennemy.y;
+            this.emitterRed.x = projectile.x+ projectile.width;
+            this.emitterRed.y = projectile.y+ projectile.height /2;
             this.emitterRed.start(true, 100, null, 15);
         }
         projectile.kill();
@@ -510,8 +525,8 @@ var shooterState = {
         }
 
         //Parametrage particule
-        this.emitterBrown.x = this.boss.sprite.x;
-        this.emitterBrown.y = this.boss.sprite.y;
+        this.emitterBrown.x = projectile.x+ projectile.width;
+        this.emitterBrown.y = projectile.y+ projectile.height /2;
         this.emitterBrown.start(true, 100, null, 15);
 
         projectile.kill();
@@ -538,7 +553,9 @@ var shooterState = {
         ennemy.loadTexture(sprite);
         ennemy.checkWorldBounds = true;
         ennemy.outOfBoundsKill = true;
-        ennemy.reset(this.boss.sprite.x  -10, this.boss.sprite.y);  
+        ennemy.reset(this.boss.sprite.x  +10, this.boss.sprite.y+1*this.boss.sprite.height/4 ); 
+        game.add.tween(ennemy).to({"y" : this.boss.sprite.y+3*this.boss.sprite.height/4}).easing(Phaser.Easing.Bounce.Out).start();
+        this.bossTrashSpawnSound.play();
     },
 
     updateTextScore : function(){
