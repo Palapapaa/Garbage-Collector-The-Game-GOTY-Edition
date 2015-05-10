@@ -1,4 +1,12 @@
 var shooterState = {
+    
+    //chargement des params du niveau
+    init : function(level){
+        console.log("Shooter state init");
+        this.levelConfig = level;
+        
+    },
+    
     preload : function(){
         console.log("Shooter state preload");
         this.UP = -1;
@@ -10,10 +18,10 @@ var shooterState = {
         this.WEAPONSWITCHDELAY = 20;//temps entre chaque changement d'arme
         this.weaponSwitchCooldown=0;//temps avant de tirer à nouveau
 
-        this.levelSpeed = 3;
+        this.levelSpeed = this.levelConfig.levelSpeed;
         this.inputManager = new InputManager(game);
 
-        this.nbEnnemies  = 15;
+        this.nbEnnemies  = this.levelConfig.ennemies;
         this.stop        = false;
         this.bossAdded   = false;
 
@@ -25,6 +33,7 @@ var shooterState = {
         this.deathSound  = game.add.audio("death");
         this.winSound    = game.add.audio("win");
         this.pickupSound = game.add.audio("pickup");
+        this.powerupSound = game.add.audio("powerup");
         this.cleanSuccessSound = game.add.audio("cleanSuccess");
         this.cleanFailSound = game.add.audio("cleanFail");
         this.bossTrashSpawnSound = game.add.audio("bossTrashSpawn");
@@ -65,8 +74,8 @@ var shooterState = {
 
 
         // Affichage de l'image de fond
-        this.background  = game.add.sprite(0,0,"shooterBackground");
-        this.background2 = game.add.sprite(this.background.width,0,"shooterBackground");
+        this.background  = game.add.sprite(0,0,this.levelConfig.background);
+        this.background2 = game.add.sprite(this.background.width,0,this.levelConfig.background);
 
         this.scoreLabel = game.add.text(game.world.centerX, 50, "Score : "+this.score,
         { font: '32px Arial', fill: '#FFFF00' });
@@ -171,7 +180,8 @@ var shooterState = {
 
         console.log("shooter state create() finished");
 
-        this.loopEnnemies = game.time.events.loop(1000, this.addEnnemy, this);
+
+        this.loopEnnemies = game.time.events.loop(this.levelConfig.ennemySpawnInterval, this.addEnnemy, this);
         this.loopPickupBonus = game.time.events.loop(16500, this.addPickupBonus, this);
 
         this.availableBonusType = ['battery','bulb'];
@@ -556,9 +566,14 @@ var shooterState = {
         if(this.boss.life < (this.boss.initialLife /2) && this.boss.damaged === false){
             this.boss.sprite.loadTexture("spriteBoss1Damaged");
         }
+        //le boss est mort, on termine le niveau
         if(this.boss.life <= 0){
             boss.kill();
             this.score += 100;
+            if(game.global.clearedLevels.indexOf(this.levelConfig.id)==-1){
+                game.global.clearedLevels.push(this.levelConfig.id);
+            }
+            game.global.lastLevel = Math.max(game.global.lastLevel, this.levelConfig.reward);
             this.updateTextScore();
             this.winSound.play();
             game.state.start('quizz');
