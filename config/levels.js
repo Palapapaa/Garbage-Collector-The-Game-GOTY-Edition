@@ -21,6 +21,7 @@ var levels = [
         background: "level1Background",
         ennemies : 17,
         ennemySpawnInterval : 1500,
+        powerupSpawnInterval : 14000,
         levelSpeed : 3,
         reward: 1,
          
@@ -36,6 +37,7 @@ var levels = [
         background: "level2Background",
         ennemies : 20,
         ennemySpawnInterval : 1400,
+        powerupSpawnInterval : 15000,
         levelSpeed : 4,
         reward: 2,
          
@@ -51,6 +53,7 @@ var levels = [
         background: "level3Background",
         ennemies : 25,
         ennemySpawnInterval : 1100,
+        powerupSpawnInterval : 16000,
         levelSpeed : 5,
         reward: 3,
          

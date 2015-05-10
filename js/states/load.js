@@ -55,6 +55,8 @@ var loadState = {
         game.load.image('particleGreen' , 'assets/graphics/pixel_green.png');
         game.load.image('particleBrown' , 'assets/graphics/pixel_brown.png');
         game.load.image('particleSmoke' , 'assets/graphics/smoke.png');
+        game.load.image('particlePowerupSpeed' , 'assets/graphics/particle_speed.png');
+        game.load.image('particlePowerupDamage' , 'assets/graphics/particle_damage.png');
 
         game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         
@@ -107,7 +109,8 @@ var loadState = {
         game.load.audio('hit',['assets/audio/hit.wav',]);
         game.load.audio('death',['assets/audio/death.wav',]);
         game.load.audio('win',['assets/audio/win.wav',]);
-        game.load.audio('powerup',['assets/audio/win.wav',]);
+        game.load.audio('powerup',['assets/audio/powerup.wav',]);
+        game.load.audio('powerdown',['assets/audio/powerdown.wav',]);
         game.load.audio('shoot',['assets/audio/shoot.wav',]);
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    

@@ -34,6 +34,7 @@ var shooterState = {
         this.winSound    = game.add.audio("win");
         this.pickupSound = game.add.audio("pickup");
         this.powerupSound = game.add.audio("powerup");
+        this.powerdownSound = game.add.audio("powerdown");
         this.cleanSuccessSound = game.add.audio("cleanSuccess");
         this.cleanFailSound = game.add.audio("cleanFail");
         this.bossTrashSpawnSound = game.add.audio("bossTrashSpawn");
@@ -136,7 +137,7 @@ var shooterState = {
         game.physics.arcade.collide(this.player, this.projectiles);
 
         // Création joueur
-        this.player = new Player(10, 2, this.weapons, "spritePlayer");
+        this.player = new Player(10, 3, this.weapons, "spritePlayer");
         this.player.sprite.animations.play('move');
 
         //Ajout de l'aspirateur sur le joueur
@@ -161,6 +162,28 @@ var shooterState = {
         this.emitterGreen.setYSpeed(-150, 150);
         this.emitterGreen.gravity = 0;
         this.emitterGreen.makeParticles('particleGreen');
+        
+        
+        // Particules powerup-speed
+        this.emitterPowerupSpeed = game.add.emitter(0, 0 , 5);
+        this.emitterPowerupSpeed.setXSpeed(-25, 25);
+        this.emitterPowerupSpeed.setYSpeed(0, 0);
+        this.emitterPowerupSpeed.gravity = -100;        
+        this.emitterPowerupSpeed.minParticleScale = 0.3;
+        this.emitterPowerupSpeed.maxParticleScale = 1.5;        
+        this.emitterPowerupSpeed.minRotation=0;
+        this.emitterPowerupSpeed.maxRotation=0;
+        this.emitterPowerupSpeed.makeParticles('particlePowerupSpeed');
+        // Particules powerup-damage
+        this.emitterPowerupDamage = game.add.emitter(0, 0 , 5);
+        this.emitterPowerupDamage.setXSpeed(-25, 25);
+        this.emitterPowerupDamage.setYSpeed(0, 0);
+        this.emitterPowerupDamage.gravity = -100;
+        this.emitterPowerupDamage.minParticleScale = 0.3;
+        this.emitterPowerupDamage.maxParticleScale = 1.5;
+        this.emitterPowerupDamage.minRotation=0;
+        this.emitterPowerupDamage.maxRotation=0;
+        this.emitterPowerupDamage.makeParticles('particlePowerupDamage');
 
         //Particules marrons
         this.emitterBrown = game.add.emitter(0, 0 , 15);
@@ -182,7 +205,7 @@ var shooterState = {
 
 
         this.loopEnnemies = game.time.events.loop(this.levelConfig.ennemySpawnInterval, this.addEnnemy, this);
-        this.loopPickupBonus = game.time.events.loop(16500, this.addPickupBonus, this);
+        this.loopPickupBonus = game.time.events.loop(this.levelConfig.powerupSpawnInterval, this.addPickupBonus, this);
 
         this.availableBonusType = ['battery','bulb'];
 
@@ -201,11 +224,24 @@ var shooterState = {
         }
 
         if(this.isBonused === true){
-            console.log(this.timeBonus)
             if(this.timeBonus > 0){
+                 //particules powerup
+                if(this.timeBonus%30===0){
+                   if(this.bonusIsDamage === true){
+                        this.emitterPowerupDamage.x = this.player.sprite.x+2*this.player.sprite.width/3;;
+                    this.emitterPowerupDamage.y = this.player.sprite.y;
+                    this.emitterPowerupDamage.start(true, 1800, null, 1);
+                    }else if(this.bonusIsSpeed === true){
+                        this.emitterPowerupSpeed.x = this.player.sprite.x+2*this.player.sprite.width/3;;
+                    this.emitterPowerupSpeed.y = this.player.sprite.y;
+                    this.emitterPowerupSpeed.start(true, 1800, null, 1);
+                    } 
+                }
+                
+                
                 --this.timeBonus;
             }else{
-                this.isBonused = true;
+               
                 this.stopBonus();
             }
 
@@ -322,7 +358,6 @@ var shooterState = {
                 }
             }
             //particules de fumée du camion
-            //Parametrage particule
             this.emitterSmoke.x = this.boss.sprite.x;
             this.emitterSmoke.y = this.boss.sprite.y+3*this.boss.sprite.height/4;
             this.emitterSmoke.start(true, 800, null, 0.1);
@@ -521,20 +556,20 @@ var shooterState = {
         if(pickup.type === "bulb"){
             //On double les dégats
             for(var i = 0, l = this.weapons.length; i <l ; ++i){
-                this.weapons.damage = this.weapons.damage*2;
+                this.weapons[i].delay = this.weapons[i].delay/2;
             }
             this.isBonused = true;
             this.score += 20;
-            this.timeBonus = 300;
-            this.pickupSound.play();
+            this.timeBonus = 480;
+            this.powerupSound.play();
             this.bonusIsDamage = true;
         }else if(pickup.type === "battery"){
             //PIMP MY PLAYER
-            this.player.speed += 2;
+            this.player.speed = this.player.speed*2;
             this.isBonused = true;
             this.score += 20;
-            this.timeBonus = 300;
-            this.pickupSound.play();
+            this.timeBonus = 480;
+            this.powerupSound.play();
             this.bonusIsSpeed = true;
         }else{
             ++game.global.totalTrash;
@@ -638,14 +673,15 @@ var shooterState = {
     },
 
     stopBonus : function(){
-
+        this.powerdownSound.play();
+         this.isBonused = false;
         if(this.bonusIsDamage === true){
             for(var i = 0, l = this.weapons.length; i <l ; ++i){
-                this.weapons.damage = this.weapons.damage/2;
+                this.weapons[i].delay = this.weapons[i].delay*2;
             }
             this.bonusIsDamage = false;
         }else if(this.bonusIsSpeed === true){
-            this.player.speed -= 2;
+            this.player.speed = this.player.speed/2;
             this.bonusIsSpeed = false;
         }
     }
