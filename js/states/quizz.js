@@ -21,9 +21,12 @@ var quizzState = {
         // Affichage du fond
         var background = game.stage.backgroundColor = '#199BC4';
         
-        var screenTitle = game.add.text(game.world.centerX, 96, 'Niveau terminé!\nBonus écologique : ',
+        var screenTitle = game.add.text(game.world.centerX, 96, 'Niveau terminé!',
         { font: 'bold 64px Arial', fill: '#ffffff' });
         screenTitle.anchor.setTo(0.5, 0.5);
+         var bonusTitle = game.add.text(game.world.centerX, 156, 'Bonus écologique : ',
+        { font: 'bold 32px Arial', fill: '#ffffff' });
+        bonusTitle.anchor.setTo(0.5, 0.5);
         
         //choix de la question
         var questionId = Math.floor(Math.random()*questions.length); 
@@ -35,12 +38,12 @@ var quizzState = {
         questionTitle.anchor.setTo(0.5, 0.5);
         
         for(var i =0, l = this.question.choices.length;i<l;i++){
-            var choiceLabel = game.add.text(150, 250+i*25, this.question.choices[i],
+            var choiceLabel = game.add.text(165, 250+i*45, this.question.choices[i],
         { font: '24px Arial', fill: '#CCCCCC' });
         
         }
 
-        this.selector = game.add.sprite(150,250+this.selectedItem*25,"menuSelector");
+        this.selector = game.add.sprite(150,250+this.selectedItem*45,"menuSelector");
         this.selector.anchor.setTo(1,0.25);
         
     },
@@ -75,7 +78,7 @@ var quizzState = {
             if(this.selectedItem <0){
                 this.selectedItem = this.question.choices.length-1;                
             }
-            this.selector.y = 250+this.selectedItem*25;
+            this.selector.y = 250+this.selectedItem*45;
             this.menuSwitchCooldown=this.MENUSWITCHDELAY;
         }
         

@@ -545,9 +545,9 @@ var shooterState = {
             pickup.checkWorldBounds = true;
             pickup.outOfBoundsKill = true;
 
-            pickup.reset(x , y);
+            pickup.reset(x , y-20);
 
-            game.add.tween(pickup).to({"y" : y-10}).easing(Phaser.Easing.Bounce.Out).start();
+            game.add.tween(pickup).to({"y" : y}).easing(Phaser.Easing.Bounce.Out).start();
         }
     },
 
