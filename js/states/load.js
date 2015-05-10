@@ -29,6 +29,12 @@ var loadState = {
         game.load.image('level2Background' , 'assets/graphics/background_level2.png');
         game.load.image('level3Background' , 'assets/graphics/background_level3.png');
         
+        game.load.image('menuCiel' , 'assets/graphics/menu-ciel.png');
+        game.load.image('menuNuages' , 'assets/graphics/menu-nuages.png');
+        game.load.image('menuRoute' , 'assets/graphics/menu-route.png');
+        
+
+
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
         game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/sprite_joueur.png', 144, 96);
         game.load.image('spriteAspirateur' , 'assets/graphics/sprite_aspirateur.png');
