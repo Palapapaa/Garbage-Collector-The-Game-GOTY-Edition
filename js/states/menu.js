@@ -83,13 +83,13 @@ var menuState = {
         }
         this.backgroundRoute.x  -= 4;
         this.backgroundNuages.x --;
-        this.backgroundNuages2 --;
+        this.backgroundNuages2.x --;
         if(this.backgroundRoute.x < -800){
             this.backgroundRoute.x = 0;
         }
         if(this.backgroundNuages2.x < 0){
-            this.backgroundNuages.x = this.backgroundNuages2.width;
-            this.backgroundNuages2.x = this.backgroundNuages2.width;
+            this.backgroundNuages.x += this.backgroundNuages2.width;
+            this.backgroundNuages2.x += this.backgroundNuages2.width;
 
         }
         
