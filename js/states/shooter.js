@@ -138,10 +138,13 @@ var shooterState = {
 
         this.loopEnnemies = game.time.events.loop(1000, this.addEnnemy, this);
         
-        
         // Création de la popup d'achivements
-        this.popup = game.add.sprite(580,500,"achievementPopup");
+        this.popup = game.add.sprite(580,600,"achievementPopup");
         this.popup.alpha = 0.5;
+        this.popupTitle = game.add.text(680, 630, "Succès débloqué",
+        { font: 'bold 20px Arial', fill: '#ffffff' });
+        this.popupTitle.anchor.setTo(0.5, 0.5);
+        this.achUnlock = false;
     },
     
     update : function(){
@@ -212,6 +215,13 @@ var shooterState = {
             var spriteEnnemy = this.ennemies.children[i];
             spriteEnnemy.x-=this.levelSpeed;
             //test de collision avec le joueur
+        }
+        
+        //Achievement Unlock
+        if(!this.achUnlock && game.global.totalMetal == 1)
+        {
+            this.achUnlock = true;
+            this.showPopup('Heavy and Metal');
         }
 
         //Les ennemies ont été butés, apparition du boss
@@ -398,7 +408,6 @@ var shooterState = {
             projectile.reset(x, y);
 
             this.player.weapons[this.player.selectedWeapon].reloadCooldown();
-            this.showPopup();
         }
 
     },
@@ -562,8 +571,21 @@ var shooterState = {
         this.scoreLabel.setText("Score : "+this.score);
     },
     
-    showPopup : function(){
-        // Achievement animation
-        game.add.tween(this.popup).to(this.popup.y-100, 1000, Phaser.Easing.Bounce.Out, true, 1000, false);
+    showPopup : function(text){
+        // Achievement Popup animation
+        this.popupLabel = game.add.text(680, 670, text,
+        { font: '18px Arial', fill: '#ffffff' });
+        this.popupLabel.anchor.setTo(0.5, 0.5);
+        tweenShow = game.add.tween(this.popup).to({"y" : this.popup.y-100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupTitle).to({"y" : this.popupTitle.y-100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupLabel).to({"y" : this.popupLabel.y-100}, 2000, Phaser.Easing.Linear.None, true);
+        tweenShow.onComplete.addOnce(this.hidePopup, this);
+    },
+    
+    hidePopup : function(){
+        // Achievement Popout animation
+        tweenHide = game.add.tween(this.popup).to({"y" : this.popup.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
+        game.add.tween(this.popupTitle).to({"y" : this.popupTitle.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
+        game.add.tween(this.popupLabel).to({"y" : this.popupLabel.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
     }
 }; 
