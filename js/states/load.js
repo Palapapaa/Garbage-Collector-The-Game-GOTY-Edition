@@ -25,7 +25,9 @@ var loadState = {
         game.load.image('menuButton' , 'assets/graphics/menu_button.png');
         game.load.image('menuSelector' , 'assets/graphics/menu_selector.png');
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
-        game.load.image('shooterBackground' , 'assets/graphics/background_shooter.png');
+        game.load.image('level1Background' , 'assets/graphics/background_level1.png');
+        game.load.image('level2Background' , 'assets/graphics/background_level2.png');
+        game.load.image('level3Background' , 'assets/graphics/background_level3.png');
         
         game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
         game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/sprite_joueur.png', 144, 96);
@@ -101,6 +103,7 @@ var loadState = {
         game.load.audio('hit',['assets/audio/hit.wav',]);
         game.load.audio('death',['assets/audio/death.wav',]);
         game.load.audio('win',['assets/audio/win.wav',]);
+        game.load.audio('powerup',['assets/audio/win.wav',]);
         game.load.audio('shoot',['assets/audio/shoot.wav',]);
         game.load.audio('startup',['assets/audio/startup.wav',]);
         game.load.audio('bgm_menu',['assets/audio/gin_menu.mp3',]);    

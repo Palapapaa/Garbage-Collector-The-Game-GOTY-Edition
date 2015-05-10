@@ -27,13 +27,17 @@ var worldmapState = {
             
             var levelBgIcon = game.add.sprite(levels[i].x, levels[i].y, "levelButton");
             var levelFgIcon = game.add.sprite(levels[i].x, levels[i].y, "icon"+levels[i].id);
-            if(levels[i].cleared){
+            
+            //si le niveau est bloqué ou terminé
+            if(game.global.clearedLevels.indexOf(levels[i].id)!=-1){
                 var levelWidget = game.add.sprite(levels[i].x, levels[i].y, "iconCleared");
             }else if(game.global.lastLevel < levels[i].req){
                 var levelWidget = game.add.sprite(levels[i].x, levels[i].y, "iconLock");
             }
             
         }
+        this.pickupSound = game.add.audio("pickup");
+        this.hitSound = game.add.audio("hit");
     },
     
     update : function(){
@@ -52,7 +56,7 @@ var worldmapState = {
         
         // On lance l'état sélectionné
         if(this.inputManager.select.isDown){
-            game.state.start(levels[this.selectedItem].state);
+            this.levelSelect();
         }
         
         
@@ -74,5 +78,15 @@ var worldmapState = {
         }
         
     },
+    levelSelect : function(){
+        //on lance le niveau selectionné si débloqué
+        if(game.global.lastLevel >= levels[this.selectedItem].req){
+                game.state.start(levels[this.selectedItem].state, false, false,levels[this.selectedItem]);
+            this.pickupSound.play();
+        }else{
+            this.hitSound.play();
+        }
+        
+    }
     
 };

@@ -20,7 +20,8 @@ window.onload = function() {
         stockPaper : 0,
         stockPlastic : 0,
         possibleTypes : ["plastic", "metal", "glass", "paper"],
-        lastLevel : 1,
+        lastLevel : 0,
+        clearedLevels : [],
         
     };
     
