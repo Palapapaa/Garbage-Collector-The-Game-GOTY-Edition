@@ -7,7 +7,7 @@ var gameoverState = {
         
         
         
-        this.menuSwitchCooldown=30;//temps avant de valider la sélection
+        this.menuSwitchCooldown = 30;//temps avant de valider la sélection
     },
     
     
@@ -30,7 +30,7 @@ var gameoverState = {
     
     update : function(){
          if(this.menuSwitchCooldown>0){
-            this.menuSwitchCooldown--;   
+            --this.menuSwitchCooldown;   
         }
 
         

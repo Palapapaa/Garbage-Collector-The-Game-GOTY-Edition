@@ -24,21 +24,18 @@ var tutorialState = {
         
         this.barillet = game.add.sprite(baX, baY, 'spriteSheetBarillet');
         this.barillet.anchor.setTo(0.5, 0.5);
+        var styleBarillet = { font: '28px Arial', fill: '#ffffff' };
         //plastique
-        game.add.text(baX, baY-40, game.global.inputLabel[0],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        game.add.text(baX, baY-40, game.global.inputLabel[0], styleBarillet).anchor.setTo(0.5, 0.5);
         game.add.sprite(baX+10, baY-85, 'spriteTrashPlastic').anchor.setTo(0.5, 0.5);
         //metal
-        game.add.text(baX+43, baY+4, game.global.inputLabel[1],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        game.add.text(baX+43, baY+4, game.global.inputLabel[1], styleBarillet).anchor.setTo(0.5, 0.5);
         game.add.sprite(baX+85, baY+4, 'spriteTrashMetal').anchor.setTo(0.5, 0.5);
         //verre
-        game.add.text(baX, baY+45, game.global.inputLabel[2],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        game.add.text(baX, baY+45, game.global.inputLabel[2], styleBarillet).anchor.setTo(0.5, 0.5);
         game.add.sprite(baX+10, baY+85, 'spriteTrashGlass').anchor.setTo(0.5, 0.5);
         //papier
-        game.add.text(baX-43, baY+4, game.global.inputLabel[3],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        game.add.text(baX-43, baY+4, game.global.inputLabel[3], styleBarillet).anchor.setTo(0.5, 0.5);
         game.add.sprite(baX-85, baY+4, 'spriteTrashPaper').anchor.setTo(0.5, 0.5);
         
         this.barillet.animations.add('idle', [0,1,0,2,0,3,0,4], 3, true);

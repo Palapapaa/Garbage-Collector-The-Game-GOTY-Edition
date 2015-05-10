@@ -90,19 +90,16 @@ var shooterState = {
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
             this.weapons.push(new Weapon(30,game.global.possibleTypes[i], 5, 2));
         }
-        
+
         // Définition du barillet
+        var barilletStyle = { font: '28px Arial', fill: '#ffffff' };
         this.barillet = game.add.sprite(704, 96, 'spriteSheetBarillet');
         this.barillet.anchor.setTo(0.5, 0.5);
         this.barillet.alpha = 0.75;
-        this.barillet.labelWeapon0 = game.add.text(704, 55, game.global.inputLabel[0],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
-        this.barillet.labelWeapon0 = game.add.text(747, 98, game.global.inputLabel[1],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
-        this.barillet.labelWeapon0 = game.add.text(704, 140, game.global.inputLabel[2],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
-        this.barillet.labelWeapon0 = game.add.text(662, 98, game.global.inputLabel[3],
-        { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
+        this.barillet.labelWeapon0 = game.add.text(704, 55, game.global.inputLabel[0], barilletStyle).anchor.setTo(0.5, 0.5);
+        this.barillet.labelWeapon0 = game.add.text(747, 98, game.global.inputLabel[1], barilletStyle).anchor.setTo(0.5, 0.5);
+        this.barillet.labelWeapon0 = game.add.text(704, 140, game.global.inputLabel[2], barilletStyle).anchor.setTo(0.5, 0.5);
+        this.barillet.labelWeapon0 = game.add.text(662, 98, game.global.inputLabel[3], barilletStyle).anchor.setTo(0.5, 0.5);
         
         this.barillet.animations.add('idle', 0, 8, true);
         this.barillet.animations.add('weapon0', [0,1,0,1,0], 8, false);
@@ -114,8 +111,6 @@ var shooterState = {
 		this.ennemies    = game.add.group();
         this.ennemies.enableBody = true;
         this.boss         = null;
-        this.deplacementX = 0;
-        this.dirX         = 1;//Direction du déplacement (-1 ou 1)
         this.deplacementY = 0;
         this.dirY         = 1;//Direction du déplacement (-1 ou 1)
 
@@ -137,7 +132,7 @@ var shooterState = {
         game.physics.arcade.collide(this.player, this.projectiles);
 
         // Création joueur
-        this.player = new Player(10, 3, this.weapons, "spritePlayer");
+        this.player = new Player(10, 3, this.weapons, "spriteSheetPlayer");
         this.player.sprite.animations.play('move');
 
         //Ajout de l'aspirateur sur le joueur
@@ -147,7 +142,7 @@ var shooterState = {
         
         // Définition de la barre de vie
         this.lifeTab = [];
-        this.updatePlayerLife(this.player.life);
+        this.initPlayerLife(this.player.life);
         
         // Particules rouges
         this.emitterRed = game.add.emitter(0, 0 , 30);
@@ -174,6 +169,7 @@ var shooterState = {
         this.emitterPowerupSpeed.minRotation=0;
         this.emitterPowerupSpeed.maxRotation=0;
         this.emitterPowerupSpeed.makeParticles('particlePowerupSpeed');
+
         // Particules powerup-damage
         this.emitterPowerupDamage = game.add.emitter(0, 0 , 5);
         this.emitterPowerupDamage.setXSpeed(-25, 25);
@@ -201,10 +197,7 @@ var shooterState = {
         this.emitterSmoke.maxParticleScale = 1.9;
         this.emitterSmoke.makeParticles('particleSmoke');
 
-        console.log("shooter state create() finished");
-
-
-        this.loopEnnemies = game.time.events.loop(this.levelConfig.ennemySpawnInterval, this.addEnnemy, this);
+        this.loopEnnemies    = game.time.events.loop(this.levelConfig.ennemySpawnInterval, this.addEnnemy, this);
         this.loopPickupBonus = game.time.events.loop(this.levelConfig.powerupSpawnInterval, this.addPickupBonus, this);
 
         this.availableBonusType = ['battery','bulb'];
@@ -216,6 +209,9 @@ var shooterState = {
         { font: 'bold 20px Arial', fill: '#ffffff' });
         this.popupTitle.anchor.setTo(0.5, 0.5);
         this.achUnlock = false;
+
+        console.log("shooter state create() finished");
+
     },
     
     update : function(){
@@ -244,14 +240,10 @@ var shooterState = {
                     this.emitterPowerupSpeed.start(true, 1800, null, 1);
                     } 
                 }
-                
-                
                 --this.timeBonus;
             }else{
-               
                 this.stopBonus();
             }
-
         }
 
         // A voir si on fera vraiment comme ça ...
@@ -334,7 +326,7 @@ var shooterState = {
             game.physics.arcade.collide(this.boss ,this.projectiles);
             game.physics.arcade.collide(this.boss, this.player);
 
-            game.time.events.loop(1000, this.bossAddEnnemy, this);
+            this.loopBoss = game.time.events.loop(1000, this.bossAddEnnemy, this);
 
         //maj du BOSS
         }else if(this.bossAdded === true){
@@ -397,8 +389,9 @@ var shooterState = {
         var midHeight = (this.player.sprite.height/2);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - midHeight &&newY+midHeight<=this.LEVELBOTTOM)){
     		this.player.sprite.y = newY;
-            this.player.body.y += direction*(this.player.speed);
-            this.aspirateur.y += direction*(this.player.speed);
+            var deplacementY = direction*(this.player.speed);
+            this.player.body.y += deplacementY;
+            this.aspirateur.y  += deplacementY;
         }
     },
 
@@ -416,28 +409,26 @@ var shooterState = {
 
         var ennemy = this.ennemies.getFirstDead();
 
-        if(!ennemy)
-            return;
-        
-        var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
-        ennemy.type = this.availableTypes[enemyTypeId];
+        if(ennemy){
+            var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
+            ennemy.type = this.availableTypes[enemyTypeId];
 
-        ennemy.life   = 10;
-        
-        
-        var sprite = this.spriteTrashType[ennemy.type];
-        if(typeof sprite === "undefined"){
-            console.log("Mauvais type d'ennemi : "+type);
-            sprite = "spriteTrashPlastic";
-        }
+            ennemy.life   = 10;
+            
+            
+            var sprite = this.spriteTrashType[ennemy.type];
+            if(typeof sprite === "undefined"){
+                console.log("Mauvais type d'ennemi : "+type);
+                sprite = "spriteTrashPlastic";
+            }
 
-        ennemy.loadTexture(sprite);
-        ennemy.checkWorldBounds = true;
-        ennemy.outOfBoundsKill = true;
-        ennemy.reset(800 , ((Math.random() * 328)+250));
+            ennemy.loadTexture(sprite);
+            ennemy.checkWorldBounds = true;
+            ennemy.outOfBoundsKill = true;
+            ennemy.reset(game.global.gameWidth , ((Math.random() * 328)+250));
 
-        --this.nbEnnemies;   
-
+            --this.nbEnnemies;
+        } 
     },
 
     takeDamage : function(player, ennemy){
@@ -494,8 +485,7 @@ var shooterState = {
         }
 
     },
-    
-    updatePlayerLife: function(life) {
+    initPlayerLife: function(life){
         // Suppression de la barre de vie
         for(var i=this.lifeTab.length-1; i>=0; --i) {
             this.lifeTab[i].kill();
@@ -509,6 +499,23 @@ var shooterState = {
             this.lifeTab.push(game.add.sprite(32+i*20,32,sprite));
 
         }
+    },
+    
+    updatePlayerLife: function() {
+        //Nombre de coeurs
+        var nbLife = this.lifeTab.length;
+        if(nbLife > 0){
+            //Index du dernier élément
+            var lastElem = this.lifeTab[(nbLife - 1)];
+            //Si coeur plein, on le remplace par un demi coeur
+            if(lastElem.key === "spriteLifeFull"){
+                lastElem.loadTexture("spriteLifeHalf");
+            //Sinon, suppresion du sprite
+            }else{
+                lastElem.kill();
+                this.lifeTab.splice((nbLife - 1), 1);
+            }
+        }     
     },
 
     //Fonction de collision entre projectile et ennemis
@@ -533,6 +540,7 @@ var shooterState = {
             this.emitterRed.y = projectile.y+ projectile.height /2;
             this.emitterRed.start(true, 100, null, 15);
         }
+
         projectile.kill();
 
     },
@@ -612,14 +620,12 @@ var shooterState = {
     damageBoss : function(boss, projectile){
         this.boss.life -= projectile.damage;
 
-        if(this.boss.life < (this.boss.initialLife /2) && this.boss.damaged === false){
-            this.boss.sprite.loadTexture("spriteBoss1Damaged");
-        }
         //le boss est mort, on termine le niveau
         if(this.boss.life <= 0){
+            game.time.events.remove(this.loopBoss);
             boss.kill();
             this.score += 100;
-            if(game.global.clearedLevels.indexOf(this.levelConfig.id)==-1){
+            if(game.global.clearedLevels.indexOf(this.levelConfig.id) === -1){
                 game.global.clearedLevels.push(this.levelConfig.id);
             }
             game.global.lastLevel = Math.max(game.global.lastLevel, this.levelConfig.reward);
@@ -628,6 +634,9 @@ var shooterState = {
             game.state.start('quizz');
         }
 
+        if(this.boss.life < (this.boss.initialLife /2) && this.boss.damaged === false){
+            this.boss.sprite.loadTexture("spriteBoss1Damaged");
+        }
         //Parametrage particule
         this.emitterBrown.x = projectile.x+ projectile.width;
         this.emitterBrown.y = projectile.y+ projectile.height /2;
@@ -640,26 +649,25 @@ var shooterState = {
     bossAddEnnemy : function(){
         var ennemy = this.ennemies.getFirstDead();
 
-        if(!ennemy)
-            return;
+        if(ennemy){
+            var enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
+            ennemy.type = this.availableTypes[enemyTypeId];
 
-        
-        var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
-        ennemy.type = this.availableTypes[enemyTypeId];
+            ennemy.life   = 10;
 
-        ennemy.life   = 10;
-
-        var sprite = this.spriteTrashType[ennemy.type];
-        if(typeof sprite === "undefined"){
-            sprite = "spriteTrashPlastic";
-            console.log("Mauvais type d'ennemi : "+type);
+            var sprite = this.spriteTrashType[ennemy.type];
+            if(typeof sprite === "undefined"){
+                sprite = "spriteTrashPlastic";
+                console.log("Mauvais type d'ennemi : "+type);
+            }
+            ennemy.loadTexture(sprite);
+            ennemy.checkWorldBounds = true;
+            ennemy.outOfBoundsKill  = true;
+            var quaterBossHeight   = this.boss.sprite.height/4,
+            ennemy.reset(this.boss.sprite.x  +10, this.boss.sprite.y+1*quaterBossHeight ); 
+            game.add.tween(ennemy).to({"y" : this.boss.sprite.y+3*quaterBossHeight}).easing(Phaser.Easing.Bounce.Out).start();
+            this.bossTrashSpawnSound.play();
         }
-        ennemy.loadTexture(sprite);
-        ennemy.checkWorldBounds = true;
-        ennemy.outOfBoundsKill = true;
-        ennemy.reset(this.boss.sprite.x  +10, this.boss.sprite.y+1*this.boss.sprite.height/4 ); 
-        game.add.tween(ennemy).to({"y" : this.boss.sprite.y+3*this.boss.sprite.height/4}).easing(Phaser.Easing.Bounce.Out).start();
-        this.bossTrashSpawnSound.play();
     },
 
     updateTextScore : function(){
@@ -667,7 +675,6 @@ var shooterState = {
     },
 
     addPickupBonus : function(){
-        //var ennemy = new Trash(10, "metal");
         var pickup = this.pickups.getFirstDead();
 
         if(pickup){
@@ -680,15 +687,15 @@ var shooterState = {
                 pickup.loadTexture("spritePickupBattery");
             }
             pickup.checkWorldBounds = true;
-            pickup.outOfBoundsKill = true;
+            pickup.outOfBoundsKill  = true;
 
-            pickup.reset(800 , ((Math.random() * 328)+250));
+            pickup.reset(game.global.gameWidth , ((Math.random() * 328)+250));
         }
     },
 
     stopBonus : function(){
         this.powerdownSound.play();
-         this.isBonused = false;
+        this.isBonused = false;
         if(this.bonusIsDamage === true){
             for(var i = 0, l = this.weapons.length; i <l ; ++i){
                 this.weapons[i].delay = this.weapons[i].delay*2;
