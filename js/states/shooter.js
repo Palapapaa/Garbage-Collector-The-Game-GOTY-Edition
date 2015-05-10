@@ -55,6 +55,10 @@ var shooterState = {
             "plastic" : "spritePickupPlastique"
         };
 
+        this.isBonused = false;
+        this.timeBonus = 300;//Nombre de frame
+        this.bonusIsSpeed = false;
+        this.bonusIsDamage = false;
     },
     
     create : function(){
@@ -72,9 +76,9 @@ var shooterState = {
         this.availableTypes = ["plastic","metal", "glass", "paper"];
         
         // Création des armes du joueur
-        var weapons = [];
+        this.weapons = [];
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
-            weapons.push(new Weapon(30,this.availableTypes[i], 5, 2));
+            this.weapons.push(new Weapon(30,this.availableTypes[i], 5, 2));
         }
         
         // Définition du barillet
@@ -123,7 +127,7 @@ var shooterState = {
         game.physics.arcade.collide(this.player, this.projectiles);
 
         // Création joueur
-        this.player = new Player(10, 2, weapons, "spritePlayer");
+        this.player = new Player(10, 2, this.weapons, "spritePlayer");
         this.player.sprite.animations.play('move');
 
         //Ajout de l'aspirateur sur le joueur
@@ -168,6 +172,10 @@ var shooterState = {
         console.log("shooter state create() finished");
 
         this.loopEnnemies = game.time.events.loop(1000, this.addEnnemy, this);
+        this.loopPickupBonus = game.time.events.loop(16500, this.addPickupBonus, this);
+
+        this.availableBonusType = ['battery','bulb'];
+
     },
     
     update : function(){
@@ -179,6 +187,17 @@ var shooterState = {
         if(this.background2.x < 0){
             this.background.x += this.background.width;
             this.background2.x += this.background.width;
+
+        }
+
+        if(this.isBonused === true){
+            console.log(this.timeBonus)
+            if(this.timeBonus > 0){
+                --this.timeBonus;
+            }else{
+                this.isBonused = true;
+                this.stopBonus();
+            }
 
         }
 
@@ -489,25 +508,46 @@ var shooterState = {
 
     takePickup : function(player, pickup){
 
-        game.global.totalTrash++;
-        if(pickup.type === "metal"){
-            ++game.global.totalMetal;
-            ++game.global.stockMetal;
-        }else if(pickup.type === "glass"){
-            ++game.global.totalGlass;
-            ++game.global.stockGlass;
-        }else if(pickup.type === "paper"){
-            ++game.global.totalPaper;
-            ++game.global.stockPaper;
-        }else if(pickup.type === "plastic"){
-            ++game.global.totalPlastic;
-            ++game.global.stockPlastic;
+        if(pickup.type === "bulb"){
+            //On double les dégats
+            for(var i = 0, l = this.weapons.length; i <l ; ++i){
+                this.weapons.damage = this.weapons.damage*2;
+            }
+            this.isBonused = true;
+            this.score += 20;
+            this.timeBonus = 300;
+            this.pickupSound.play();
+            this.bonusIsDamage = true;
+        }else if(pickup.type === "battery"){
+            //PIMP MY PLAYER
+            this.player.speed += 2;
+            this.isBonused = true;
+            this.score += 20;
+            this.timeBonus = 300;
+            this.pickupSound.play();
+            this.bonusIsSpeed = true;
+        }else{
+            ++game.global.totalTrash;
+            if(pickup.type === "metal"){
+                ++game.global.totalMetal;
+                ++game.global.stockMetal;
+            }else if(pickup.type === "glass"){
+                ++game.global.totalGlass;
+                ++game.global.stockGlass;
+            }else if(pickup.type === "paper"){
+                ++game.global.totalPaper;
+                ++game.global.stockPaper;
+            }else if(pickup.type === "plastic"){
+                ++game.global.totalPlastic;
+                ++game.global.stockPlastic;
+            }
+            this.score += 15;
+            this.pickupSound.play();
         }
-        this.score += 15;
+
         this.updateTextScore();
 
         pickup.kill();
-        this.pickupSound.play();
     },
 
     damageBoss : function(boss, projectile){
@@ -560,5 +600,38 @@ var shooterState = {
 
     updateTextScore : function(){
         this.scoreLabel.setText("Score : "+this.score);
+    },
+
+    addPickupBonus : function(){
+        //var ennemy = new Trash(10, "metal");
+        var pickup = this.pickups.getFirstDead();
+
+        if(pickup){
+            pickup.type = this.availableBonusType[Math.round(Math.random())];
+
+            var sprite = this.spritePickupType[pickup.type];
+            if(pickup.type === "bulb"){
+                pickup.loadTexture("spritePickupBulb");
+            }else if(pickup.type === "battery"){
+                pickup.loadTexture("spritePickupBattery");
+            }
+            pickup.checkWorldBounds = true;
+            pickup.outOfBoundsKill = true;
+
+            pickup.reset(800 , ((Math.random() * 328)+250));
+        }
+    },
+
+    stopBonus : function(){
+
+        if(this.bonusIsDamage === true){
+            for(var i = 0, l = this.weapons.length; i <l ; ++i){
+                this.weapons.damage = this.weapons.damage/2;
+            }
+            this.bonusIsDamage = false;
+        }else if(this.bonusIsSpeed === true){
+            this.player.speed -= 2;
+            this.bonusIsSpeed = false;
+        }
     }
 }; 

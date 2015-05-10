@@ -45,7 +45,7 @@ var loadState = {
         game.load.image('spriteProjGlass' , 'assets/graphics/sprite_projectile_glass_e1.png');
         
         game.load.image('spriteBoss1' , 'assets/graphics/sprite_boss1.png');
-        game.load.image('spriteBoss1Damaged' , 'assets/graphics/sprite_boss1_Damaged.png');
+        game.load.image('spriteBoss1Damaged' , 'assets/graphics/sprite_boss1_damaged.png');
 
         //game.load.image('smoke', 'assets/smoke-puff.png');
 
@@ -68,7 +68,11 @@ var loadState = {
         game.load.image('spritePickupMetal' , 'assets/graphics/sprite_pickup_metal_e1.png');
         game.load.image('spritePickupPaper' , 'assets/graphics/sprite_pickup_paper_e1.png');
         game.load.image('spritePickupPlastique' , 'assets/graphics/sprite_pickup_plastic_e1.png');
+        game.load.image('spritePickupBulb' , 'assets/graphics/sprite_pickupBulb.png');
+        game.load.image('spritePickupBattery' , 'assets/graphics/sprite_pickupBattery.png');
         
+
+
         //images tuto
         game.load.image('upArrowPic' , 'assets/graphics/up_arrow.png');
         game.load.image('downArrowPic' , 'assets/graphics/down_arrow.png');
