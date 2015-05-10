@@ -46,17 +46,18 @@ var menuState = {
         if(this.menuSwitchCooldown>0){
             this.menuSwitchCooldown--;   
         }
-
-        if(this.inputManager.down.isDown === true){
+        console.log(this.inputManager.inputMode);
+        console.log(this.inputManager.mode[this.inputManager.inputMode]);
+        if(this.inputManager.mode[this.inputManager.inputMode].down.isDown === true){
             this.menuSwitch(this.DOWN);
         }
 
-        if(this.inputManager.up.isDown === true){
+        if(this.inputManager.mode[this.inputManager.inputMode].up.isDown === true){
             this.menuSwitch(this.UP);
         }
         
         // On lance l'état sélectionné
-        if(this.inputManager.select.isDown){
+        if(this.inputManager.mode[this.inputManager.inputMode].select.isDown){
             game.state.start(this.menuItems[this.selectedItem].id);
         }       
     },

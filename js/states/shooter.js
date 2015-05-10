@@ -17,7 +17,6 @@ var shooterState = {
         this.nbEnnemies  = 25;
         this.stop        = false;
         this.bossAdded   = false;
-
         this.score       = 0;
 
         //Sons
@@ -32,16 +31,15 @@ var shooterState = {
         this.playerBlink = false;
         this.playerBlinkCpt = 60;
         this.playerDisplayed = true;
-
     },
     
     create : function(){
 
-
         // Affichage de l'image de fond
         this.background  = game.add.sprite(0,0,"shooterBackground");
         this.background2 = game.add.sprite(this.background.width,0,"shooterBackground");
-
+        
+        // Score
         this.scoreLabel = game.add.text(game.world.centerX, 50, "Score : "+this.score,
         { font: '32px Arial', fill: '#FFFF00' });
         this.scoreLabel.anchor.setTo(0.5, 0.5);
@@ -61,9 +59,7 @@ var shooterState = {
 
         //Ajout de l'aspirateur sur le joueur
         this.aspirateur = game.add.sprite(this.player.sprite.x+26, this.player.sprite.y-3, "spriteAspirateur");
-
         game.physics.arcade.enable(this.aspirateur);
-
         
         // Définition de la barre de vie
         this.lifeTab = [];
@@ -73,6 +69,7 @@ var shooterState = {
         this.barillet = game.add.sprite(704, 96, 'spriteSheetBarillet');
         this.barillet.anchor.setTo(0.5, 0.5);
         this.barillet.alpha = 0.75;
+
         this.barillet.labelWeapon0 = game.add.text(704, 55, game.global.inputLabel[0],
         { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
         this.barillet.labelWeapon0 = game.add.text(747, 98, game.global.inputLabel[1],
@@ -135,12 +132,16 @@ var shooterState = {
         this.emitterBrown.gravity = 0;
         this.emitterBrown.makeParticles('particleBrown');
 
+        console.log("Shooter state create() finished");
 
-        console.log("shooter state create() finished");
-
-		this.proba = 0.011;//Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
+		this.proba = 0.011; //Variable pour apparition ennemies (plus ellevé = moins d'ennemies)
 
         this.loopEnnemies = game.time.events.loop(1000, this.addEnnemy, this);
+        
+        
+        // Création de la popup d'achivements
+        this.popup = game.add.sprite(580,500,"achievementPopup");
+        this.popup.alpha = 0.5;
     },
     
     update : function(){
@@ -152,7 +153,6 @@ var shooterState = {
         if(this.background2.x < 0){
             this.background.x += this.background.width;
             this.background2.x += this.background.width;
-
         }
 
         // A voir si on fera vraiment comme ça ...
@@ -212,7 +212,6 @@ var shooterState = {
             var spriteEnnemy = this.ennemies.children[i];
             spriteEnnemy.x-=this.levelSpeed;
             //test de collision avec le joueur
-
         }
 
         //Les ennemies ont été butés, apparition du boss
@@ -224,9 +223,7 @@ var shooterState = {
             this.bossAdded = true;
             game.physics.arcade.collide(this.boss ,this.projectiles);
             game.physics.arcade.collide(this.boss, this.player);
-
             game.time.events.loop(1000, this.bossAddEnnemy, this);
-
         }
 
         if(this.bossAdded === true){
@@ -318,9 +315,7 @@ var shooterState = {
         
         var  enemyTypeId = Math.floor(Math.random()*this.availableTypes.length);
         ennemy.type = this.availableTypes[enemyTypeId];
-
-        ennemy.life   = 10;
-        
+        ennemy.life   = 10;  
         
         var sprite = "spriteTrashPlastic";
         if(ennemy.type === "metal"){
@@ -335,6 +330,7 @@ var shooterState = {
         }else {
             console.log("Mauvais type d'ennemi : "+type);
         }
+
         ennemy.loadTexture(sprite);
         ennemy.checkWorldBounds = true;
         ennemy.outOfBoundsKill = true;
@@ -564,5 +560,10 @@ var shooterState = {
 
     updateTextScore : function(){
         this.scoreLabel.setText("Score : "+this.score);
+    },
+    
+    showPopup : function(){
+        // Achievement animation
+        game.add.tween(this.popup).to(this.popup.y-100, 1000, Phaser.Easing.Bounce.Out, true, 1000, false);
     }
 }; 

@@ -62,20 +62,23 @@ var loadState = {
         // Barillet
         game.load.spritesheet('spriteSheetBarillet' , 'assets/graphics/sprite_barillet.png', 128, 128);
 
-        //Pickup
+        // Pickup
         game.load.image('spritePickupGlass' , 'assets/graphics/sprite_pickup_glass_e1.png');
         game.load.image('spritePickupMetal' , 'assets/graphics/sprite_pickup_metal_e1.png');
         game.load.image('spritePickupPaper' , 'assets/graphics/sprite_pickup_paper_e1.png');
         game.load.image('spritePickupPlastique' , 'assets/graphics/sprite_pickup_plastic_e1.png');
         
-        //images tuto
+        // Popup Achievements
+        game.load.image('achievementPopup' , 'assets/graphics/sprite_popup.png');
+        
+        // Images tuto
         game.load.image('upArrowPic' , 'assets/graphics/up_arrow.png');
         game.load.image('downArrowPic' , 'assets/graphics/down_arrow.png');
         game.load.image('leftArrowPic' , 'assets/graphics/left_arrow.png');
         game.load.image('rightArrowPic' , 'assets/graphics/right_arrow.png');
         game.load.image('spaceBarPic' , 'assets/graphics/space_bar.png');
 
-        //chargement des images liées aux succès
+        // Chargement des images liées aux succès
         game.load.image('achievementLocked' , 'assets/graphics/achievement_lock.png');
         game.load.image('achievementUnlocked' , 'assets/graphics/achievement_unlock.png');
         game.load.image('iconLock' , 'assets/graphics/icon_lock.png');
@@ -84,7 +87,7 @@ var loadState = {
             
         }
         
-        //chargement des images liées aux niveaux
+        // Chargement des images liées aux niveaux
         game.load.image('levelSelector' , 'assets/graphics/level_selector.png');
         game.load.image('levelButton' , 'assets/graphics/level_button.png');
         game.load.image('iconCleared' , 'assets/graphics/icon_cleared.png');
