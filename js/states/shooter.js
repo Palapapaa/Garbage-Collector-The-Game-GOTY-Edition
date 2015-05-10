@@ -209,6 +209,13 @@ var shooterState = {
 
         this.availableBonusType = ['battery','bulb'];
 
+        // Création de la popup d'achivements
+        this.popup = game.add.sprite(580,600,"achievementPopup");
+        this.popup.alpha = 0.5;
+        this.popupTitle = game.add.text(680, 630, "Succès débloqué",
+        { font: 'bold 20px Arial', fill: '#ffffff' });
+        this.popupTitle.anchor.setTo(0.5, 0.5);
+        this.achUnlock = false;
     },
     
     update : function(){
@@ -315,7 +322,13 @@ var shooterState = {
             game.physics.arcade.overlap(this.player.body, this.ennemies, this.takeDamage, null, this);
         }
 
-
+        //Achievement Unlock
+        if(!this.achUnlock && game.global.totalMetal == 1)
+        {
+            this.achUnlock = true;
+            this.showPopup('Heavy and Metal');
+        }
+        
         //Les ennemies ont été butés, apparition du boss
         if(this.nbEnnemies < 0 && this.bossAdded === false){
             //On stop l'apparition des ennemies
@@ -684,5 +697,23 @@ var shooterState = {
             this.player.speed = this.player.speed/2;
             this.bonusIsSpeed = false;
         }
+    },
+    
+    showPopup : function(text){
+        // Achievement Popup animation
+        this.popupLabel = game.add.text(680, 670, text,
+        { font: '18px Arial', fill: '#ffffff' });
+        this.popupLabel.anchor.setTo(0.5, 0.5);
+        tweenShow = game.add.tween(this.popup).to({"y" : this.popup.y-100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupTitle).to({"y" : this.popupTitle.y-100}, 2000, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupLabel).to({"y" : this.popupLabel.y-100}, 2000, Phaser.Easing.Linear.None, true);
+        tweenShow.onComplete.addOnce(this.hidePopup, this);
+    },
+    
+    hidePopup : function(){
+        // Achievement Popout animation
+        tweenHide = game.add.tween(this.popup).to({"y" : this.popup.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
+        game.add.tween(this.popupTitle).to({"y" : this.popupTitle.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
+        game.add.tween(this.popupLabel).to({"y" : this.popupLabel.y+100}, 2000, Phaser.Easing.Linear.None, true, 2000);
     }
 }; 

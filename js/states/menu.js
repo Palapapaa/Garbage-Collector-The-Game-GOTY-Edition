@@ -21,18 +21,27 @@ var menuState = {
     create : function(){
         // Affichage du fond
         var background = game.stage.backgroundColor = '#199BC4';
+
+
+        //
+        this.backgroundCiel     = game.add.sprite(0,0,"menuCiel");
+        this.backgroundRoute    = game.add.sprite(0,0,"menuRoute");
+        this.backgroundNuages   = game.add.sprite(0,0,"menuNuages");
+        this.backgroundNuages2   = game.add.sprite(1600,0,"menuNuages");
+
+
         var title = game.add.sprite(0,0,"menuTitle");
         var playButton = game.add.text(game.world.centerX, game.world.centerY, 'Jouer',
-        { font: 'bold 64px Arial', fill: '#ffffff' });
+        { font: 'bold 64px Arial', fill: '#FFA500' });
         playButton.anchor.setTo(0.5, 0.5);
         var tutorialButton = game.add.text(game.world.centerX, game.world.centerY+96, 'Tutoriel',
-        { font: 'bold 64px Arial', fill: '#ffffff' });
+        { font: 'bold 64px Arial', fill: '#FFA500' });
         tutorialButton.anchor.setTo(0.5, 0.5);
         var achievementButton = game.add.text(game.world.centerX, game.world.centerY+192, 'Succès',
-        { font: 'bold 64px Arial', fill: '#ffffff' });
+        { font: 'bold 64px Arial', fill: '#FFA500' });
         achievementButton.anchor.setTo(0.5, 0.5);
         var helpText = game.add.text(game.world.centerX, 560, 'Appuyez sur Espace pour valider',
-        { font: 'italic 24px Arial', fill: '#ffffff'});
+        { font: 'italic 24px Arial', fill: '#FFA500'});
         helpText.anchor.setTo(0.5, 0.5);
 
         this.selector = game.add.sprite(130,this.menuItems[this.selectedItem].y,"menuSelector");
@@ -58,7 +67,20 @@ var menuState = {
         // On lance l'état sélectionné
         if(this.inputManager.select.isDown){
             game.state.start(this.menuItems[this.selectedItem].id);
-        }       
+        }
+        this.backgroundRoute.x  -= 4;
+        this.backgroundNuages.x --;
+        this.backgroundNuages2 --;
+        if(this.backgroundRoute.x < -800){
+            this.backgroundRoute.x = 0;
+        }
+        if(this.backgroundNuages2.x < 0){
+            this.backgroundNuages.x = this.backgroundNuages2.width;
+            this.backgroundNuages2.x = this.backgroundNuages2.width;
+
+        }
+
+
     },
     
     //changement d'item dans le menu
