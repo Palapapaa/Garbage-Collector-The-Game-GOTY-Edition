@@ -21,6 +21,7 @@ window.onload = function() {
         possibleTypes : ["plastic", "metal", "glass", "paper"],
         lastLevel : 0,
         clearedLevels : [],
+        clearedAchievements : [],
         
     };
     
