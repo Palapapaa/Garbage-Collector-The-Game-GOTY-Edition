@@ -2,7 +2,7 @@ var InputManager = function(game){
     if(!game.device.mobile) {
         // Initialisation des touches
         this.mode = [] ;
-        this.inputMode = 1;
+        this.inputMode = 0;
         // Touches pour le PC
         this.mode[0] = new InputClass();
         this.mode[0].up         = game.input.keyboard.addKey(Phaser.Keyboard.UP);

@@ -73,7 +73,7 @@ var achievementState = {
     
     update : function(){
         // Passage à l'état de jeu world map
-        if(this.inputManager.esc.isDown){
+        if(this.inputManager.mode[this.inputManager.inputMode].esc.isDown){
             game.state.start('menu');
         }
     },

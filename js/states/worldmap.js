@@ -40,18 +40,18 @@ var worldmapState = {
         if(this.menuSwitchCooldown>0){
             this.menuSwitchCooldown--;   
         }
-        if(this.inputManager.esc.isDown){
+        if(this.inputManager.mode[this.inputManager.inputMode].esc.isDown){
             game.state.start('menu');
         }
-        if(this.inputManager.right.isDown === true){
+        if(this.inputManager.mode[this.inputManager.inputMode].right.isDown === true){
             this.menuSwitch(this.DOWN);
         }
-        if(this.inputManager.left.isDown === true){
+        if(this.inputManager.mode[this.inputManager.inputMode].left.isDown === true){
             this.menuSwitch(this.UP);
         }
         
         // On lance l'état sélectionné
-        if(this.inputManager.select.isDown){
+        if(this.inputManager.mode[this.inputManager.inputMode].select.isDown){
             game.state.start(levels[this.selectedItem].state);
         }
         

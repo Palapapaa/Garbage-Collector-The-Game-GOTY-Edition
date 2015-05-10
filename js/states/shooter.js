@@ -70,13 +70,13 @@ var shooterState = {
         this.barillet.anchor.setTo(0.5, 0.5);
         this.barillet.alpha = 0.75;
 
-        this.barillet.labelWeapon0 = game.add.text(704, 55, game.global.inputLabel[0],
+        this.barillet.labelWeapon0 = game.add.text(704, 55, this.inputManager.mode[this.inputManager.inputMode].inputLabel[0],
         { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
-        this.barillet.labelWeapon0 = game.add.text(747, 98, game.global.inputLabel[1],
+        this.barillet.labelWeapon0 = game.add.text(747, 98, this.inputManager.mode[this.inputManager.inputMode].inputLabel[1],
         { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
-        this.barillet.labelWeapon0 = game.add.text(704, 140, game.global.inputLabel[2],
+        this.barillet.labelWeapon0 = game.add.text(704, 140, this.inputManager.mode[this.inputManager.inputMode].inputLabel[2],
         { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
-        this.barillet.labelWeapon0 = game.add.text(662, 98, game.global.inputLabel[3],
+        this.barillet.labelWeapon0 = game.add.text(662, 98, this.inputManager.mode[this.inputManager.inputMode].inputLabel[3],
         { font: '28px Arial', fill: '#ffffff' }).anchor.setTo(0.5, 0.5);
         
         this.barillet.animations.add('idle', 0, 8, true);
@@ -157,27 +157,27 @@ var shooterState = {
 
         // A voir si on fera vraiment comme ça ...
         // Passage à l'état de jeu world map
-        if(this.inputManager.esc.isDown === true){
+        if(this.inputManager.mode[this.inputManager.inputMode].esc.isDown === true){
             game.state.start('worldmap');
         }
 
-        if(this.inputManager.down.isDown === true){
+        if(this.inputManager.mode[this.inputManager.inputMode].down.isDown === true){
             this.movePlayer(this.DOWN);
         }
-        if(this.inputManager.up.isDown === true){
+        if(this.inputManager.mode[this.inputManager.inputMode].up.isDown === true){
             this.movePlayer(this.UP);
         }
 
-        if(this.inputManager.weapon1.isDown){
+        if(this.inputManager.mode[this.inputManager.inputMode].weapon1.isDown){
             this.switchWeapon(0);
             this.fire();
-        }else if(this.inputManager.weapon2.isDown){
+        }else if(this.inputManager.mode[this.inputManager.inputMode].weapon2.isDown){
             this.switchWeapon(1);
             this.fire();
-        }else if(this.inputManager.weapon3.isDown){
+        }else if(this.inputManager.mode[this.inputManager.inputMode].weapon3.isDown){
             this.switchWeapon(2);
             this.fire();
-        }else if(this.inputManager.weapon4.isDown){
+        }else if(this.inputManager.mode[this.inputManager.inputMode].weapon4.isDown){
             this.switchWeapon(3);
             this.fire();
         }
@@ -398,7 +398,7 @@ var shooterState = {
             projectile.reset(x, y);
 
             this.player.weapons[this.player.selectedWeapon].reloadCooldown();
-
+            this.showPopup();
         }
 
     },
