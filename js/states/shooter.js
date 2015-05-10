@@ -75,20 +75,6 @@ var shooterState = {
         for(var i = 0, l= this.availableTypes.length;i< l; i++){
             weapons.push(new Weapon(30,this.availableTypes[i], 5, 2));
         }
-
-        // Création joueur
-        this.player = new Player(10, 2, weapons, "spritePlayer");
-        this.player.sprite.animations.play('move');
-
-        //Ajout de l'aspirateur sur le joueur
-        this.aspirateur = game.add.sprite(this.player.sprite.x+26, this.player.sprite.y-3, "spriteAspirateur");
-
-        game.physics.arcade.enable(this.aspirateur);
-
-        
-        // Définition de la barre de vie
-        this.lifeTab = [];
-        this.updatePlayerLife(this.player.life);
         
         // Définition du barillet
         this.barillet = game.add.sprite(704, 96, 'spriteSheetBarillet');
@@ -135,6 +121,19 @@ var shooterState = {
         this.projectiles.createMultiple(25, "spriteProjMetal");
         game.physics.arcade.collide(this.player, this.projectiles);
 
+        // Création joueur
+        this.player = new Player(10, 2, weapons, "spritePlayer");
+        this.player.sprite.animations.play('move');
+
+        //Ajout de l'aspirateur sur le joueur
+        this.aspirateur = game.add.sprite(this.player.sprite.x+26, this.player.sprite.y-3, "spriteAspirateur");
+        game.physics.arcade.enable(this.aspirateur);
+
+        
+        // Définition de la barre de vie
+        this.lifeTab = [];
+        this.updatePlayerLife(this.player.life);
+        
         // Particules rouges
         this.emitterRed = game.add.emitter(0, 0 , 30);
         this.emitterRed.setXSpeed(-150, 150);
@@ -239,7 +238,7 @@ var shooterState = {
             for(var i = 0, l = nbEnnemies; i < l; ++i){
                 this.ennemies.children[i].x-=this.levelSpeed;
             }
-            game.physics.arcade.overlap(this.player.sprite, this.ennemies, this.takeDamage, null, this);
+            game.physics.arcade.overlap(this.player.body, this.ennemies, this.takeDamage, null, this);
         }
 
 
@@ -311,7 +310,8 @@ var shooterState = {
         var midHeight = (this.player.sprite.height/2);
     	if(this.player.life > 0 && (newY>=this.LEVELTOP - midHeight &&newY+midHeight<=this.LEVELBOTTOM)){
     		this.player.sprite.y = newY;
-            this.aspirateur.y    += direction*(this.player.speed);
+            this.player.body.y += direction*(this.player.speed);
+            this.aspirateur.y += direction*(this.player.speed);
         }
     },
 
