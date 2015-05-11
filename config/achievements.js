@@ -14,7 +14,7 @@ var achievements = [
     }, 
     {
          id : "42",
-         name : "La réponse à l'univers, la vie et le reste",
+         name : "La vie, l'univers et le reste",
          desc : "Vous avez recyclé 42 déchets!",
          icon : "icon_42.png",
          type : "total",

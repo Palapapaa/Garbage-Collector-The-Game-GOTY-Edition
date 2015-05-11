@@ -14,8 +14,8 @@ var shooterState = {
         this.LEVELTOP=250;
         
         this.LEVELBOTTOM=game.global.gameHeight;
-        this.POPUPSHOWSPEED=3000;
-        this.POPUPHIDESPEED=5000;
+        this.POPUPSHOWSPEED=2000;
+        this.POPUPHIDEDELAY=5000;
 
         this.WEAPONSWITCHDELAY = 20;//temps entre chaque changement d'arme
         this.weaponSwitchCooldown=0;//temps avant de tirer à nouveau
@@ -206,13 +206,11 @@ var shooterState = {
 
         // Création de la popup d'achivements
         this.popupElements = {
-            "background" : game.add.sprite(580,600,"achievementPopup"), 
-            "title" : game.add.text(620, 630, "Succès débloqué",
-        { font: 'bold 18px Arial', fill: '#ffffff' }),
-            "label" :game.add.text(680, 670, "",
-        { font: '15px Arial', fill: '#ffffff' }),
-            "bgicon":game.add.sprite(590,630,"achievementUnlocked"),
-            "fgicon":game.add.sprite(590,630,"iconLock"),
+            "background" : game.add.sprite(580,game.global.gameHeight+100,"achievementPopup"), 
+            "title" : game.add.text(620, game.global.gameHeight+110, "Succès débloqué", { font: 'bold 18px Arial', fill: '#ffffff' }),
+            "label" :game.add.text(680, game.global.gameHeight+140, "", { font: '15px Arial', fill: '#ffffff' }),
+            "bgicon":game.add.sprite(585,game.global.gameHeight+105,"achievementUnlocked"),
+            "fgicon":game.add.sprite(585,game.global.gameHeight+105,"iconLock"),
             
         }
         this.popupElements.background.alpha = 0.5;
@@ -603,9 +601,9 @@ var shooterState = {
                 ++game.global.totalMetal;
                 ++game.global.stockMetal;
  //TODO BOUGER SSA               //Achievement Unlock
-                if(!this.achUnlock && game.global.totalMetal === 1)
+                if(!this.achUnlock && game.global.totalMetal === 8)
                 {
-                    var selectedAch = 1;
+                    var selectedAch = 0;
                     this.achUnlock = true;
                     this.showPopup(selectedAch);
                 }
@@ -721,25 +719,25 @@ var shooterState = {
     showPopup : function(ach){
         // Achievement Popup animation
         console.log(ach);
-        this.popupElements.label = game.add.text(720, 670, achievements[ach].name,
-        { font: '18px Arial', fill: '#ffffff' });
+        this.popupElements.label = game.add.text(680, game.global.gameHeight+150, achievements[ach].name, 
+        { font: '14px Arial', fill: '#ffffff' });
         this.popupElements.label.anchor.setTo(0.5, 0.5);
-        this.popupElements.fgicon = game.add.sprite(590,630,"icon"+achievements[ach].id);
+        this.popupElements.fgicon = game.add.sprite(585,game.global.gameHeight+105,"icon"+achievements[ach].id);
         //this.popupElements.label
         game.add.tween(this.popupElements.background).to({"y" : game.global.gameHeight-100}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
-        game.add.tween(this.popupElements.title).to({"y" : game.global.gameHeight-100}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.title).to({"y" : game.global.gameHeight-90}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
         game.add.tween(this.popupElements.label).to({"y" : game.global.gameHeight-50}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
-        game.add.tween(this.popupElements.bgicon).to({"y" : game.global.gameHeight-100}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
-       tweenShow =  game.add.tween(this.popupElements.fgicon).to({"y" : game.global.gameHeight-100},  this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
+        game.add.tween(this.popupElements.bgicon).to({"y" : game.global.gameHeight-95}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
+       tweenShow = game.add.tween(this.popupElements.fgicon).to({"y" : game.global.gameHeight-95},  this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true);
         tweenShow.onComplete.addOnce(this.hidePopup, this);
     },
     
     hidePopup : function(){
         // Achievement Popout animation
-        tweenHide = game.add.tween(this.popupElements.background).to({"y" : game.global.gameHeight+100},  this.POPUPHIDESPEED, Phaser.Easing.Linear.None, true, this.POPUPSHOWSPEED);
-        game.add.tween(this.popupElements.title).to({"y" : game.global.gameHeight+100}, this.POPUPHIDESPEED, Phaser.Easing.Linear.None, true, this.POPUPSHOWSPEED);
-        game.add.tween(this.popupElements.label).to({"y" : game.global.gameHeight+100}, this.POPUPHIDESPEED, Phaser.Easing.Linear.None, true, this.POPUPSHOWSPEED);
-        game.add.tween(this.popupElements.bgicon).to({"y" : game.global.gameHeight+100}, this.POPUPHIDESPEED, Phaser.Easing.Linear.None, true, this.POPUPSHOWSPEED);
-        game.add.tween(this.popupElements.fgicon).to({"y" : game.global.gameHeight+100}, this.POPUPHIDESPEED, Phaser.Easing.Linear.None, true, this.POPUPSHOWSPEED);
+        tweenHide = game.add.tween(this.popupElements.background).to({"y" : game.global.gameHeight+100},  this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true, this.POPUPHIDEDELAY);
+        game.add.tween(this.popupElements.title).to({"y" : game.global.gameHeight+110}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true, this.POPUPHIDEDELAY);
+        game.add.tween(this.popupElements.label).to({"y" : game.global.gameHeight+150}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true, this.POPUPHIDEDELAY);
+        game.add.tween(this.popupElements.bgicon).to({"y" : game.global.gameHeight+105}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true, this.POPUPHIDEDELAY);
+        game.add.tween(this.popupElements.fgicon).to({"y" : game.global.gameHeight+105}, this.POPUPSHOWSPEED, Phaser.Easing.Linear.None, true, this.POPUPHIDEDELAY);
     }
 }; 
