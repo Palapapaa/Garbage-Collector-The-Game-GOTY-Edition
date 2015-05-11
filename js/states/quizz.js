@@ -37,7 +37,7 @@ var quizzState = {
         { font: '26px Arial', fill: '#ffffff' });
         questionTitle.anchor.setTo(0.5, 0.5);
         
-        for(var i =0, l = this.question.choices.length;i<l;i++){
+        for(var i =0, l = this.question.choices.length;i<l;++i){
             var choiceLabel = game.add.text(165, 250+i*45, this.question.choices[i],
         { font: '24px Arial', fill: '#CCCCCC' });
         
@@ -50,7 +50,7 @@ var quizzState = {
     
     update : function(){
          if(this.menuSwitchCooldown>0){
-            this.menuSwitchCooldown--;   
+            --this.menuSwitchCooldown;   
         }
 
         if(this.inputManager.down.isDown === true){

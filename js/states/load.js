@@ -22,7 +22,6 @@ var loadState = {
         
         // Chargement des images
         game.load.image('menuTitle' , 'assets/graphics/menu_title.png');
-        game.load.image('menuButton' , 'assets/graphics/menu_button.png');
         game.load.image('menuSelector' , 'assets/graphics/menu_selector.png');
         game.load.image('achievementsBackground' , 'assets/graphics/background_achievements.png');
         game.load.image('level1Background' , 'assets/graphics/background_level1.png');
@@ -35,7 +34,6 @@ var loadState = {
         
         game.load.image('achievementPopup' , 'assets/graphics/sprite_popup.png');
 
-        game.load.image('spritePlayer' , 'assets/graphics/sprite_joueur_e1.png');
         game.load.spritesheet('spriteSheetPlayer' , 'assets/graphics/sprite_joueur.png', 144, 96);
         game.load.image('spriteAspirateur' , 'assets/graphics/sprite_aspirateur.png');
 
@@ -64,7 +62,7 @@ var loadState = {
         game.load.image('particlePowerupSpeed' , 'assets/graphics/particle_speed.png');
         game.load.image('particlePowerupDamage' , 'assets/graphics/particle_damage.png');
 
-        game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
+        //game.load.image('spriteEnnemi' , 'assets/graphics/sprite_ennemi1_e1.png');
         
         // Sprites UI
         // Vie
@@ -80,7 +78,6 @@ var loadState = {
         game.load.image('spritePickupPlastique' , 'assets/graphics/sprite_pickup_plastic_e1.png');
         game.load.image('spritePickupBulb' , 'assets/graphics/sprite_pickupBulb.png');
         game.load.image('spritePickupBattery' , 'assets/graphics/sprite_pickupBattery.png');
-        
 
 
         //images tuto
@@ -88,13 +85,12 @@ var loadState = {
         game.load.image('downArrowPic' , 'assets/graphics/down_arrow.png');
         game.load.image('leftArrowPic' , 'assets/graphics/left_arrow.png');
         game.load.image('rightArrowPic' , 'assets/graphics/right_arrow.png');
-        game.load.image('spaceBarPic' , 'assets/graphics/space_bar.png');
 
         //chargement des images liées aux succès
         game.load.image('achievementLocked' , 'assets/graphics/achievement_lock.png');
         game.load.image('achievementUnlocked' , 'assets/graphics/achievement_unlock.png');
         game.load.image('iconLock' , 'assets/graphics/icon_lock.png');
-        for(var i=0, l = achievements.length; i<l; i++){
+        for(var i=0, l = achievements.length; i<l; ++i){
             game.load.image("icon"+achievements[i].id , 'assets/graphics/'+achievements[i].icon);
             
         }
@@ -107,8 +103,6 @@ var loadState = {
             game.load.image("icon"+levels[i].id , 'assets/graphics/'+levels[i].icon);
             
         }
-        
-        
         
         // Chargement des sons
         game.load.audio('explosion',['assets/audio/explosion.wav',]);

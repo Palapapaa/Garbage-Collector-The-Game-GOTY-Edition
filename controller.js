@@ -9,7 +9,6 @@ window.onload = function() {
         enterLastValue : false,
         gameWidth : 800,
         gameHeight : 600,
-        selectedItem : 0,
         totalTrash : 0,
         totalMetal : 0,
         totalGlass : 0,
@@ -22,6 +21,7 @@ window.onload = function() {
         possibleTypes : ["plastic", "metal", "glass", "paper"],
         lastLevel : 0,
         clearedLevels : [],
+        clearedAchievements : [],
         
     };
     

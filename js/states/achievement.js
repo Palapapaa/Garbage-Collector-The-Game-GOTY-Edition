@@ -26,7 +26,7 @@ var achievementState = {
         
         //Affichages des succès
         var achY = 195;
-        for(var i=0, l = achievements.length; i<l; i++){
+        for(var i=0, l = achievements.length; i<l; ++i){
             
             var desc = "???";
             var color = "#888888";
