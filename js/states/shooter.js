@@ -671,8 +671,8 @@ var shooterState = {
             ennemy.loadTexture(sprite);
             ennemy.checkWorldBounds = true;
             ennemy.outOfBoundsKill  = true;
-            var quaterBossHeight   = this.boss.sprite.height/4,
-            ennemy.reset(this.boss.sprite.x  +10, this.boss.sprite.y+1*quaterBossHeight ); 
+            var quaterBossHeight   = this.boss.sprite.height/4;
+            ennemy.reset(this.boss.sprite.x  +10, this.boss.sprite.y+quaterBossHeight ); 
             game.add.tween(ennemy).to({"y" : this.boss.sprite.y+3*quaterBossHeight}).easing(Phaser.Easing.Bounce.Out).start();
             this.bossTrashSpawnSound.play();
         }
